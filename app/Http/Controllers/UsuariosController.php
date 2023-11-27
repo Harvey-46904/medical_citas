@@ -108,6 +108,10 @@ class UsuariosController extends Controller
     public function login(Request $request){
        // return response(["data"=>$request->all()]);
         $totalCitasEnEspera = DB::table("citas")->where('estado', 'En espera')->count();
-        return view('dash.inicio',compact("citas","totalCitasEnEspera"));
+        $nservicios = DB::table("servicios")->count();
+        $nusuarios = DB::table("usuarios")->count();
+        $ncitas = DB::table("citas")->count();
+        $totalCitasEnEspera = DB::table("citas")->where('estado', 'En espera')->count();
+        return view('dash.inicio',compact("totalCitasEnEspera","nservicios","nusuarios","ncitas"));
     }
 }
