@@ -15,11 +15,12 @@ class UsuariosController extends Controller
     public function index()
     {
         $pacientes=DB::table("usuarios")->select()->get();
-        return view("dash.pacientes",compact("pacientes"));
+        $totalCitasEnEspera = DB::table("citas")->where('estado', 'En espera')->count();
+        return view("dash.pacientes",compact("pacientes","totalCitasEnEspera"));
         return response(["data"=>$pacientes]);
     }
     public function buscarDocumento($documento){
-        $paciente=DB::table("usuarios")->select("nombre_completo")->where("cedula","=",$documento)->first();
+        $paciente=DB::table("usuarios")->select("nombre_completo","id")->where("cedula","=",$documento)->first();
         return response(["data"=>$paciente]);
     }
     /**
@@ -45,7 +46,7 @@ class UsuariosController extends Controller
         $crear_usuario->nombre_completo=$request->nombres_completos;
         $crear_usuario->role_id=1;
         $crear_usuario->save();
-        return response(["data"=>$request->nombres_completos]);
+        return response(["data"=>$crear_usuario]);
        
     }
 

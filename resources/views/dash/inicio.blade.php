@@ -1,5 +1,9 @@
 @extends('dash.index')
 @section('content')
+@php
+       
+       View::share('parametro', $totalCitasEnEspera);
+   @endphp
 <div class="container-fluid">
 
                     <!-- Page Heading -->
@@ -15,7 +19,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                Citas Agendadas</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">4</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{$ncitas}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -33,7 +37,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                             Número de servicios</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">2</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{$nservicios}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -53,7 +57,7 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">3</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{$nusuarios}}</div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
@@ -80,7 +84,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                             Notificaciones pendientes</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">2</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{$totalCitasEnEspera}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>

@@ -20,10 +20,12 @@
     <!-- Custom styles for this template-->
     <link href="dash/css/sb-admin-2.css" rel="stylesheet">
 <style>
-    .fc-disabled-day {
-    background-color: #f2f2f2; /* Cambia el color según tu preferencia */
-    color: #999;
+    .blocked-day {
+       
+    background-color: #f2f2f2;
+    color: "red"; /* Puedes ajustar el color de texto según tu preferencia */
     cursor: not-allowed;
+  
 }
 
 </style>
@@ -84,7 +86,11 @@
         <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
-                <div class="col-lg-6 d-none d-lg-block "> <div id="calendario"></div></div>
+                <div class="col-lg-6  d-lg-block "> 
+               
+                    <div id="calendario">
+
+                    </div></div>
                 <div class="col-lg-6">
                     <div class="p-5">
                         <div class="text-center">
@@ -125,6 +131,46 @@
 </div>
     </div>
 
+
+    <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agendamiento de cita</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <h5 class="font-weight-bold">No Documento</h5>
+      <h5 class="cita_documento2">No Documento</h5>
+      <hr>
+      <h5 class="font-weight-bold">Nombres</h5>
+       <h5 class="nombres">Nombres</h5>
+       <hr>
+       <h5 class="font-weight-bold">Servicio</h5>
+       <h5 class="nombre_serviciofil">Servicio</h5>
+       <hr>
+       <h5 class="font-weight-bold">Fecha</h5>
+       <h5 class="fechas_servi">Hora</h5>
+       <hr>
+      
+
+       <div class="form-group">
+            <label for="exampleFormControlSelect1">Seleccione la hora</label>
+            <select id="horas" class="form-control"></select>
+        </div>
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">cerrar</button>
+        <button type="button" class="btn btn-primary guardar_citas">Guardar cita</button>
+      </div>
+    </div>
+  </div>
+</div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="dash/vendor/jquery/jquery.min.js"></script>
     <script src="dash/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -134,10 +180,16 @@
 
     <!-- Custom scripts for all pages-->
     <script src="dash/js/sb-admin-2.min.js"></script>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         let nombre_global="";
         let numero_global="";
+        let nombre_servicio="";
+        let user_id;
+        let service_id;
+        let fecha_seleccionada;
+        let horas_seleccionada;
+        
         $("#cita").hide();
         $(document).ready(function () {
         $('#numero_documento').on('input', function () {
@@ -154,10 +206,13 @@
                         if(data.data!=null){
                             numero_global=query;
                         nombre_global=data.data.nombre_completo;
-                        console.log(nombre_global);
-                        alert("Bienvenido Nuevamente")
+                        user_id=data.data.id;
+                        
+                        
                         $(".nombres").text(nombre_global);
-                        $("#cita_documento").val(numero_global).prop("readonly", true);;
+                        $("#cita_documento").val(numero_global).prop("readonly", true);
+                        $(".cita_documento2").text(numero_global);
+                        
                         $("#regis").hide();
                         $("#cita").show();
                     }
@@ -169,6 +224,39 @@
                 });
             }
         });
+
+        $(".guardar_citas").on('click',function(){
+            var tokenCSRF = document.getElementById('formularioRegistro').querySelector('[name="_token"]').value;
+            console.log($("#horas").val());
+            var datos = {
+                _token: tokenCSRF,
+                usuario_id: user_id,
+                servicio_id: service_id,
+                fecha_cita:fecha_seleccionada + ' ' +$("#horas").val()
+                // Agrega más campos según sea necesario
+            };
+            $.ajax({
+                url: '{{ route('citas.store') }}',
+                method: 'POST',
+                data: datos,
+                success: function (data) {
+                    // Maneja los resultados y actualiza la interfaz de usuario
+                    console.log(data.data);
+                    if(data.data!=""){
+                        swal("Cita Agendada Correctamente", 
+                        nombre_global+"-"+numero_global+"-"+nombre_servicio,
+                         "success");
+                        console.log("consultado");
+                    }
+                    // Puedes mostrar los resultados en la interfaz de usuario, actualizar una lista, etc.
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+           
+
+        })
 
         $(".registro_user").on('click',function(){
             var tokenCSRF = document.getElementById('formularioRegistro').querySelector('[name="_token"]').value;
@@ -193,7 +281,8 @@
                     // Maneja los resultados y actualiza la interfaz de usuario
                     console.log(data.data);
                     if(data.data!=""){
-                        nombre_global=data.data;
+                        nombre_global=data.data.nombre_completo;
+                        user_id=data.data.id;
                         $(".nombres").text(nombre_global);
                         $("#cita_documento").val(numeroDocumento).prop("readonly", true);;
                         $("#regis").hide();
@@ -221,6 +310,53 @@
  
     $(document).ready(function() {
 
+       
+    });
+</script>
+
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+    var blockedDays = [0, 1, 2,3,4,5,6];
+    $('#calendario').fullCalendar({
+      header: {
+      },
+      events: [],
+      businessHours: {
+        dow: [], // Lunes a Viernes por defecto
+        start: '00:00',
+        end: '24:00',
+      },
+      eventRender: function (event, element) {
+        // Puedes personalizar la apariencia de los eventos aquí si es necesario
+      },
+      dayClick: function(date, jsEvent, view) {
+        var dayOfWeek = date.day();
+
+        // Verificar si el día está bloqueado
+        if (blockedDays.includes(dayOfWeek)) {
+          // El día está bloqueado, no realizar ninguna acción
+         
+          console.log("Este día está bloqueado");
+        } else {
+            $('#exampleModal').modal('show')
+          // El día no está bloqueado, realizar la acción deseada
+         
+          
+          $(".fechas_servi").text(date.format());
+          fecha_seleccionada=date.format();
+        }
+      },
+      dayRender: function (date, cell) {
+        var dayOfWeek = date.day();
+
+        // Verificar si el día está bloqueado y aplicar el estilo correspondiente
+        if (blockedDays.includes(dayOfWeek)) {
+          cell.addClass('blocked-day');
+        }
+      }
+    });
+
+    // Manejar cambios en el multiselect
         function filtrarPorId(idSeleccionado) {
             return datosDesdePHP.filter(function(servicio) {
                 return servicio.id_servi == idSeleccionado;
@@ -228,36 +364,76 @@
         }
 
         let calendar;
+       
 
-        function initCalendario(dia) {
-            calendar = $('#calendario').fullCalendar({
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month'
-                },
-                dayClick: function(date, jsEvent, view) {
-                    console.log('Día clickeado:', date.format());
-                },
-                dayRender: function(date, cell) {
-                    var diaSemana = date.day();
-                    if (diaSemana === dia || diaSemana === 5) {
-                        $(cell).addClass('fc-disabled-day');
-                    }
-                }
-            });
+        function generarHoras(rango) {
+            var selectHoras = document.getElementById("horas");
+            selectHoras.innerHTML = ""; // Limpiar el select antes de llenarlo nuevamente
+
+            var horaInicio = 8 * 60; // Convertir 8:00 AM a minutos
+            var horaFin = 18 * 60;   // Convertir 6:00 PM a minutos
+
+            for (var i = horaInicio; i < horaFin; i += rango) {
+            var hora = Math.floor(i / 60); // Obtener las horas
+            var minutos = i % 60;         // Obtener los minutos
+
+            // Formatear la hora en formato HH:mm
+            var horaFormateada = (hora < 10 ? "0" : "") + hora + ":" + (minutos === 0 ? "00" : minutos);
+
+            // Crear una opción y agregarla al select
+            var opcion = document.createElement("option");
+            opcion.value = horaFormateada;
+            opcion.text = horaFormateada;
+            selectHoras.add(opcion);
+            }
         }
-        initCalendario(4);
+    
+
         $("#services_select").on("change", function(){
                 // Obtiene el valor seleccionado
                 var valorSeleccionado = $(this).val();
                 var serviciosFiltrados = filtrarPorId(valorSeleccionado);
-                calendar.fullCalendar('rerenderEvents');
-             
-                initCalendario(2);
-                calendar.fullCalendar('rerenderEvents');
+               
+                var diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+                serviciosFiltrados=serviciosFiltrados[0]
+                console.log(serviciosFiltrados);
+                nombre_servicio=serviciosFiltrados.nombre_servicio;
+                service_id=serviciosFiltrados.id;
+                generarHoras(serviciosFiltrados.rango_minutos);
+                $(".nombre_serviciofil").text(serviciosFiltrados.nombre_servicio)
+                
+                
+                // Crear un nuevo array con 0 y 1 basado en los valores del objeto
+                var arrayDiasActivos = diasSemana.map(function(dia) {
+                return serviciosFiltrados[dia] || 0;
+                });
+               
+                let dias_bloqueados=[];
+                for (let index = 0; index < arrayDiasActivos.length; index++) {
+                  
+                    if(arrayDiasActivos[index]==0){
+                        dias_bloqueados.push(index);
+                    }
+                    
+                }
+                console.log(dias_bloqueados);
+                updateBusinessHours(dias_bloqueados);
+              
             });
-    });
+  
+
+    // Función para actualizar los días bloqueados
+    function updateBusinessHours(dias_bloqueados) {
+     
+      blockedDays=dias_bloqueados
+      $('#calendario').fullCalendar('option', 'businessHours', {
+        dow: [0, 1, 2, 3, 4, 5, 6].filter(day => !blockedDays.includes(day)),
+        start: '00:00',
+        end: '24:00',
+      });
+    }
+  });
+
 </script>
 </body>
 

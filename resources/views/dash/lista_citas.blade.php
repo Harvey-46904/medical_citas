@@ -21,13 +21,8 @@
         </div>
         @endif
     <div class="row justify-content-between">
-        <div class="col-md-3 align-items-center">  <h6 class="m-0 font-weight-bold text-primary">Lista de pacientes </h6></div>
-        <div class="col-md-3">  <a href="#" class="btn btn-success btn-icon-split" data-toggle="modal" data-target="#exampleModal"> 
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-check"></i>
-                                        </span>
-                                        <span class="text">Crear Paciente</span>
-                                    </a></div>
+        <div class="col-md-3 align-items-center">  <h6 class="m-0 font-weight-bold text-primary">Lista de citas </h6></div>
+       
     </div>
       
 
@@ -38,10 +33,12 @@
                 <thead>
                     <tr>
                         
-                        <th class="text-center">Cedula</th>
+                        <th class="text-center">No Documento</th>
                         <th class="text-center">Nombre Completo</th>
-                        <th class="text-center">Actualizar</th>
-                        <th class="text-center">Eliminar</th>
+                        <th class="text-center">Servicio</th>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Aprobar</th>
+                        <th class="text-center">Rechazar</th>
                        
                     </tr>
                 </thead>
@@ -49,17 +46,19 @@
                 <tbody>
                    
 
-                    @foreach($pacientes as $paciente)
+                    @foreach($citas as $cita)
                     <tr>
-                            <td>{{$paciente->cedula}}</td>
-                            <td> {{$paciente->nombre_completo}}</td>
+                            <td>{{$cita->cedula}}</td>
+                            <td>{{$cita->nombre_completo}}</td>
+                            <td>{{$cita->nombre_servicio}}</td>
+                            <td> {{$cita->fecha_cita}}</td>
                             <td class="text-center"> 
-                                <a href="#" class="btn btn-warning btn-circle btn-sm">
-                                        <i class="fas fa-exclamation-triangle"></i>
+                            <a href="{{ route('cita.update', ['id' => $cita->id,'valor'=>1]) }}" class="btn btn-success btn-circle btn-sm">
+                                        <i class="fas fa-check"></i>
                                     </a>
                             </td>
                             <td class="text-center">
-                                <a href="#" class="btn btn-danger btn-circle btn-sm">
+                                <a href="{{ route('cita.update', ['id' => $cita->id,'valor'=>0]) }}" class="btn btn-danger btn-circle btn-sm">
                                         <i class="fas fa-trash"></i>
                                     </a>
                             </td>

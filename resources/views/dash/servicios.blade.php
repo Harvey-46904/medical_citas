@@ -1,5 +1,10 @@
 @extends('dash.index')
 @section('content')
+
+@php
+       
+       View::share('parametro', $totalCitasEnEspera);
+   @endphp
 <div class="container-fluid">
 
 <!-- Page Heading -->

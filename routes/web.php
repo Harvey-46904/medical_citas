@@ -22,6 +22,16 @@ Route::resource('usuario', 'UsuariosController',['except'=>['create','edit']])->
     'store' => 'usuario.store',
     'index'=>'usuario.index'
 ]);
+
+Route::resource('citas', 'CitasController',['except'=>['create','edit']])->names([
+    'store' => 'citas.store',
+    'index'=>'citas.index'
+]);
+Route::get('citas-pendientes', 'CitasController@citas_pendientes')->name('citas.pendientes');
+Route::get('citas-change-estado/{id}/{valor}', 'CitasController@cambio_estado')->name('cita.update');
+Route::get('citas-rechazadas', 'CitasController@citas_rechazadas')->name('citas.rechazadas');
+Route::get('prueba_total', 'CitasController@limite_citas');
+
 Route::get('usuarios/{documento}', 'UsuariosController@buscarDocumento')->name('buscar.documento');
 Route::get('/', "CitasController@crear_cita");
 Route::get('registro', function () {
@@ -30,9 +40,7 @@ Route::get('registro', function () {
 Route::get('login', function () {
     return view('dash.login');
 });
-Route::get('dashboard', function () {
-    return view('dash.inicio');
-})->name("dashboard");
+Route::get('dashboard',"ServiciosController@datasnuestras")->name("dashboard");
 
 Route::post('logins',"UsuariosController@login")->name("login");
 Route::post('post_user',"UsuariosController@post_user")->name("post_user");

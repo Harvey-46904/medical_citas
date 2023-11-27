@@ -15,12 +15,13 @@ class ServiciosController extends Controller
      */
     public function index()
     {
+        $totalCitasEnEspera = DB::table("citas")->where('estado', 'En espera')->count();
         $consultas=DB::table("servicios")
        
         ->join('servicios_disponibilidads', 'servicios.id', '=', 'servicios_disponibilidads.servicio_id')
         ->select("servicios.nombre_servicio","servicios_disponibilidads.*")
         ->get();
-        return view('dash.servicios',compact("consultas"));
+        return view('dash.servicios',compact("consultas","totalCitasEnEspera"));
     }
 
   
@@ -109,5 +110,14 @@ class ServiciosController extends Controller
     public function destroy(servicios $servicios)
     {
         //
+    }
+
+    public function datasnuestras(){
+        $totalCitasEnEspera = DB::table("citas")->where('estado', 'En espera')->count();
+        $nservicios = DB::table("servicios")->count();
+        $nusuarios = DB::table("usuarios")->count();
+        $ncitas = DB::table("citas")->count();
+       
+        return view('dash.inicio',compact("totalCitasEnEspera","nservicios","nusuarios","ncitas"));
     }
 }
