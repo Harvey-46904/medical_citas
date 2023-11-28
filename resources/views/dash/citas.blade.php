@@ -26,7 +26,10 @@
     color: "red"; /* Puedes ajustar el color de texto según tu preferencia */
     cursor: not-allowed;
   
-}
+},
+.custom-day {
+      background-color: #aaffaa; /* Color de fondo personalizado */
+    }
 
 </style>
 </head>
@@ -48,7 +51,7 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h2 class="h4 text-gray-900 mb-4 display-4">Gestión <br>de citas</h2>
+                                        <h1 class="text-gray-900 mb-4 ">Agendamiento <br>de citas</h1>
                                     </div>
                                     <form class="user" id="formularioRegistro">
                                         @csrf
@@ -88,7 +91,7 @@
             <div class="row">
                 <div class="col-lg-6  d-lg-block "> 
                
-                    <div id="calendario">
+                    <div id="calendario" class="m-3">
 
                     </div></div>
                 <div class="col-lg-6">
@@ -113,9 +116,7 @@
                                 @endforeach
                                 </select>
                             </div>
-                            <a href="index.html" class="btn btn-primary btn-user btn-block">
-                                Registrar Cita
-                            </a>
+                            
                             <hr>
                             
                         </form>
@@ -243,10 +244,17 @@
                     // Maneja los resultados y actualiza la interfaz de usuario
                     console.log(data.data);
                     if(data.data!=""){
-                        swal("Cita Agendada Correctamente", 
+                        /*swal("Cita Agendada Correctamente", 
                         nombre_global+"-"+numero_global+"-"+nombre_servicio,
-                         "success");
-                        console.log("consultado");
+                         "success");*/
+
+                         swal(
+                            "Cita Agendada Correctamente", 
+                            nombre_global+"-"+numero_global+"-"+nombre_servicio,  
+                            "success").then(function(){
+                                location.reload();
+                            });
+                         
                     }
                     // Puedes mostrar los resultados en la interfaz de usuario, actualizar una lista, etc.
                 },
@@ -301,7 +309,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/es.js"></script>
 
 <script>
      let datosDesdePHP = @json($citas);
@@ -350,9 +358,9 @@
         var dayOfWeek = date.day();
 
         // Verificar si el día está bloqueado y aplicar el estilo correspondiente
-        if (blockedDays.includes(dayOfWeek)) {
-          cell.addClass('blocked-day');
-        }
+      
+        cell.addClass('custom-day');
+        
       }
     });
 

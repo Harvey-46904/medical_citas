@@ -10870,6 +10870,7 @@ a:focus {
 .bg-login-image {
   background: url("https://citasmedicas.techmhm.com/dash/img/logo.png");
   background-position: center;
+
   background-size: cover;
 }
 
