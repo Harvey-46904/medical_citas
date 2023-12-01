@@ -130,7 +130,7 @@
                                 <select class="form-control" id="services_select">
                                 <option disabled selected > Seleccione un servicio</option>
                                 @foreach($citas as $cita)
-                                <option value="{{$cita->id_servi}}">{{$cita->nombre_servicio}}</option>
+                                <option value="{{$cita->id_servi}}">{{$cita->nombre_servicio}}- DR {{$cita->nombre_profesinal}}</option>
                                 @endforeach
                                 </select>
                             </div>

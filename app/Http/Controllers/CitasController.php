@@ -138,7 +138,8 @@ class CitasController extends Controller
     public function crear_cita(){
         $citas=DB::table("servicios")
         ->join('servicios_disponibilidads', 'servicios.id', '=', 'servicios_disponibilidads.servicio_id')
-        ->select("servicios.id AS id_servi","servicios.nombre_servicio","servicios_disponibilidads.*")
+        ->join('profesionales', 'profesionales.id', '=', 'servicios_disponibilidads.profesional_id')
+        ->select("servicios.id AS id_servi","servicios.nombre_servicio","servicios_disponibilidads.*","profesionales.nombre_profesinal")
         ->where("servicios_disponibilidads.visibilidad","=",TRUE)
         ->get();
        

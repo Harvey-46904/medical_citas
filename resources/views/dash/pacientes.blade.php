@@ -40,6 +40,7 @@
                         
                         <th class="text-center">Cedula</th>
                         <th class="text-center">Nombre Completo</th>
+                        <th class="text-center">Teléfono</th>
                         <th class="text-center">Actualizar</th>
                         <th class="text-center">Eliminar</th>
                        
@@ -53,6 +54,7 @@
                     <tr>
                             <td>{{$paciente->cedula}}</td>
                             <td> {{$paciente->nombre_completo}}</td>
+                            <td> {{$paciente->telefono}}</td>
                             <td class="text-center">
                                 <a  href="{{ route('usuario.editar', ['id' => $paciente->id]) }}"  class="btn btn-warning btn-circle btn-sm">
                                                 <i class="fas fa-exclamation-triangle"></i>

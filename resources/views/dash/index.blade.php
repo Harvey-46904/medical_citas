@@ -190,7 +190,12 @@
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
+                                @if($parametro->total_citas_espera < 0 )
                                     Citas Pendientes
+                                @else
+                                    No Hay Citas Pendientes
+                                @endif
+                                    
                                 </h6>
                                 @for ($i = 0; $i <  $parametro->total_citas_espera ; $i++)
                                 <a class="dropdown-item d-flex align-items-center" href="{{route('citas.pendientes', ['id' => $parametro[$i]->id])}}">
