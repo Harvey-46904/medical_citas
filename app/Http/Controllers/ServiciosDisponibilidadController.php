@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\servicios_disponibilidad;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\CitasController;
 class ServiciosDisponibilidadController extends Controller
 {
     /**

@@ -12,15 +12,16 @@
     <title>Citas Medicas</title>
 
     <!-- Custom fonts for this template-->
-    <link href="dash/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="{!! asset('dash/vendor/fontawesome-free/css/all.min.css') !!}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="dash/css/sb-admin-2.css" rel="stylesheet">
+    <link href="{!! asset('dash/css/sb-admin-2.css') !!}" rel="stylesheet">
 
 </head>
+
 
 <body id="page-top">
 
@@ -48,7 +49,16 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">
+            Gestión Profesionales
+            </div>
 
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('profesional.index')}}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Profesionales</span></a>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -62,7 +72,7 @@
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Servicios</span></a>
             </li>
-
+            
             
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -100,12 +110,24 @@
                     
                         <a class="collapse-item" href="{{route('citas.index')}}">Citas Aprobadas</a>
                         <a class="collapse-item" href="{{route('citas.rechazadas')}}">Citas Rechazadas</a>
-                        <a class="collapse-item" href="{{route('citas.pendientes')}}">Citas por revizar</a>
+                        
                     </div>
                 </div>
             </li>
+            
+
 
             
+            <div class="sidebar-heading">
+            Gestión Plataforma
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('users.edit')}}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Cambio de credenciales</span></a>
+            </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -162,7 +184,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">{{ $parametro }}+</span>
+                                <span class="badge badge-danger badge-counter">{{ $parametro->total_citas_espera }}+</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -170,20 +192,24 @@
                                 <h6 class="dropdown-header">
                                     Citas Pendientes
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="{{route('citas.pendientes')}}">
+                                @for ($i = 0; $i <  $parametro->total_citas_espera ; $i++)
+                                <a class="dropdown-item d-flex align-items-center" href="{{route('citas.pendientes', ['id' => $parametro[$i]->id])}}">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
+                                        <i class="fas fa-file-alt text-white"></i>
                                         </div>
                                     </div>
                                     <div>
-                                      
-                                        <span class="font-weight-bold">Nueva Cita</span>
+                                        <div class="small text-gray-500">{{$parametro[$i]->fecha_cita}}</div>
+                                        {{$parametro[$i]->nombre_completo}} - {{$parametro[$i]->nombre_servicio}}
                                     </div>
                                 </a>
+                                @endfor
 
-                              
+                                
+                               
                             </div>
+                            
                         </li>
 
                       
@@ -194,9 +220,9 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Perfil</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{$parametro->username}}</span>
                                 <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                    src="{!! asset('dash/img/undraw_profile.svg') !!}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -249,36 +275,37 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Nos dejas?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Esta seguro que quiere cerrar sesion</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-primary" href="{{route('logina')}}">Salir</a>
                 </div>
             </div>
         </div>
     </div>
 
+
     <!-- Bootstrap core JavaScript-->
-    <script src="dash/vendor/jquery/jquery.min.js"></script>
-    <script src="dash/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="{!! asset('dash/vendor/jquery/jquery.min.js') !!}"></script>
+    <script src="{!! asset('dash/vendor/bootstrap/js/bootstrap.bundle.min.js') !!}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="dash/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="{!! asset('dash/vendor/jquery-easing/jquery.easing.min.js') !!}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="dash/js/sb-admin-2.min.js"></script>
+    <script src="{!! asset('dash/js/sb-admin-2.min.js') !!}"></script>
 
     <!-- Page level plugins -->
-    <script src="dash/vendor/chart.js/Chart.min.js"></script>
+    <script src="{!! asset('dash/vendor/chart.js/Chart.min.js') !!}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="dash/js/demo/chart-area-demo.js"></script>
-    <script src="dash/js/demo/chart-pie-demo.js"></script>
+    <script src="{!! asset('dash/js/demo/chart-area-demo.js') !!}"></script>
+    <script src="{!! asset('dash/js/demo/chart-pie-demo.js') !!}"></script>
 
 </body>
 

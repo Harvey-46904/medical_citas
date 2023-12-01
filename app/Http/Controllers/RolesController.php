@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\roles;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\CitasController;
 class RolesController extends Controller
 {
     /**

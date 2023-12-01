@@ -6,6 +6,7 @@ use App\Models\servicios;
 use App\Models\servicios_disponibilidad;
 use Illuminate\Http\Request;
 use DB;
+use App\Http\Controllers\CitasController;
 class ServiciosController extends Controller
 {
     /**
@@ -15,13 +16,21 @@ class ServiciosController extends Controller
      */
     public function index()
     {
-        $totalCitasEnEspera = DB::table("citas")->where('estado', 'En espera')->count();
+        $logicaCompartida = new CitasController();
+        $totalCitasEnEspera =$logicaCompartida->notificacion_cita();
+
+
+
+        $profesionales=DB::table("profesionales")->select()->get();
         $consultas=DB::table("servicios")
        
         ->join('servicios_disponibilidads', 'servicios.id', '=', 'servicios_disponibilidads.servicio_id')
-        ->select("servicios.nombre_servicio","servicios_disponibilidads.*")
+        ->join('profesionales','servicios_disponibilidads.profesional_id','=','profesionales.id')
+        ->select("servicios.nombre_servicio","servicios_disponibilidads.*","profesionales.nombre_profesinal")
+        ->where("servicios_disponibilidads.visibilidad","=",TRUE)
         ->get();
-        return view('dash.servicios',compact("consultas","totalCitasEnEspera"));
+       
+        return view('dash.servicios',compact("consultas","totalCitasEnEspera","profesionales"));
     }
 
   
@@ -52,16 +61,27 @@ class ServiciosController extends Controller
         
         servicios_disponibilidad::create([
            'servicio_id'=>$new_servicio->id,
+
+           'profesional_id'=>$request->profesional,
            'lunes'=>$request->lunes=="on"?1:0,
+           'rango_lunes'=>$request->lunes=="on"?$request->horaDesdeLunes."&".$request->horaHastaLunes:NULL,
            'martes'=>$request->martes=="on"?1:0,
+           'rango_martes'=>$request->martes=="on"?$request->horaDesdeMartes."&".$request->horaHastaMartes:NULL,
            'miercoles'=>$request->miercoles=="on"?1:0,
+           'rango_miercoles'=>$request->miercoles=="on"?$request->horaDesdeMiercoles."&".$request->horaHastaMiercoles:NULL,
            'jueves'=>$request->jueves=="on"?1:0,
+           'rango_jueves'=>$request->jueves=="on"?$request->horaDesdeJueves."&".$request->horaHastaJueves:NULL,
            'viernes'=>$request->viernes=="on"?1:0,
+           'rango_viernes'=>$request->viernes=="on"?$request->horaDesdeViernes."&".$request->horaHastaViernes:NULL,
            'sabado'=>$request->sabado=="on"?1:0,
+           'rango_sabado'=>$request->sabado=="on"?$request->horaDesdeSabado."&".$request->horaHastaSabado:NULL,
            'domingo'=>$request->domingo=="on"?1:0,
+           'rango_domingo'=>$request->domingo=="on"?$request->horaDesdeDomingo."&".$request->horaHastaDomingo:NULL,
            'limite_servico'=>$request->limite,
            'rango_minutos'=>$request->rango,
+           'visibilidad'=>TRUE,
         ]);
+       
 
         return redirect('/servicios')->with('success', 'Servicio guardado correctamente');
         return response(["data"=>$request->all()]);
@@ -84,9 +104,18 @@ class ServiciosController extends Controller
      * @param  \App\Models\servicios  $servicios
      * @return \Illuminate\Http\Response
      */
-    public function edit(servicios $servicios)
+    public function edit($id)
     {
-        //
+        $logicaCompartida = new CitasController();
+        $totalCitasEnEspera =$logicaCompartida->notificacion_cita();
+       
+        $consulta=DB::table("servicios")
+        ->join('servicios_disponibilidads', 'servicios.id', '=', 'servicios_disponibilidads.servicio_id')
+        ->select("servicios.id AS id_servi","servicios.nombre_servicio","servicios_disponibilidads.*")
+        ->where("servicios_disponibilidads.servicio_id","=",$id)
+        ->first();
+      
+        return view("dash.actualizar_servicio",compact("totalCitasEnEspera","consulta"));
     }
 
     /**
@@ -96,9 +125,22 @@ class ServiciosController extends Controller
      * @param  \App\Models\servicios  $servicios
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, servicios $servicios)
+    public function update(Request $request, $id)
     {
-        //
+        DB::table('servicios_disponibilidads')
+        ->where('servicio_id', $id)
+        ->update([
+            'lunes' => $request->lunes == "on" ? 1 : 0,
+            'martes' => $request->martes == "on" ? 1 : 0,
+            'miercoles' => $request->miercoles == "on" ? 1 : 0,
+            'jueves' => $request->jueves == "on" ? 1 : 0,
+            'viernes' => $request->viernes == "on" ? 1 : 0,
+            'sabado' => $request->sabado == "on" ? 1 : 0,
+            'domingo' => $request->domingo == "on" ? 1 : 0,
+            'limite_servico' => $request->limite,
+            'rango_minutos' => $request->rango,
+        ]);
+        return redirect('/servicios')->with('success', 'servicio actualizado correctamente');
     }
 
     /**
@@ -107,14 +149,18 @@ class ServiciosController extends Controller
      * @param  \App\Models\servicios  $servicios
      * @return \Illuminate\Http\Response
      */
-    public function destroy(servicios $servicios)
+    public function destroy($id)
     {
-        //
+        DB::table('servicios_disponibilidads')
+        ->where('id', $id)
+        ->update(['visibilidad' => FALSE]);
+        return back()->with('success', 'Servicio Eliminado');
     }
 
     public function datasnuestras(){
-        $totalCitasEnEspera = DB::table("citas")->where('estado', 'En espera')->count();
-        $nservicios = DB::table("servicios")->count();
+        $logicaCompartida = new CitasController();
+        $totalCitasEnEspera =$logicaCompartida->notificacion_cita();
+        $nservicios = DB::table("servicios")->join("servicios_disponibilidads","servicios.id","=","servicios_disponibilidads.servicio_id")->where("visibilidad","=",TRUE)->count();
         $nusuarios = DB::table("usuarios")->count();
         $ncitas = DB::table("citas")->count();
        

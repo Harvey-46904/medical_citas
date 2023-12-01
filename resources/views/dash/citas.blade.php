@@ -20,15 +20,23 @@
     <!-- Custom styles for this template-->
     <link href="dash/css/sb-admin-2.css" rel="stylesheet">
 <style>
-    .blocked-day {
-       
-    background-color: #f2f2f2;
-    color: "red"; /* Puedes ajustar el color de texto según tu preferencia */
-    cursor: not-allowed;
-  
-},
+
+#calendario .fc-day-grid .fc-day.fc-widget-content.blocked-day {
+    background-color: #e31b1b;
+    color: green;
+    cursor: not-allowed; 
+}
+#calendario .fc-day-grid .fc-day.fc-widget-content.available-day {
+    background-color: #42934c;
+    color: #fff;
+    cursor: not-allowed; 
+}
+    
 .custom-day {
       background-color: #aaffaa; /* Color de fondo personalizado */
+    }
+    .fc-day-number{
+        color: #fff;
     }
 
 </style>
@@ -47,7 +55,10 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6  d-flex align-items-center justify-content-center ">
+
+                            <img src="https://citasmedicas.techmhm.com/dash/img/logo.png" alt="..." width="80%" class="img-thumbnail">
+                            </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
@@ -64,6 +75,13 @@
                                             <input type="text" class="form-control form-control-user"
                                                 id="exampleInputPassword" placeholder="Nombres Completos" autocomplete="off">
                                         </div>
+
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user"
+                                                id="telefono" placeholder="Telefono" autocomplete="off">
+                                        </div>
+                                        
+                                        
                                        
                                         <a class="btn btn-primary btn-user btn-block registro_user">
                                             Registrar Usuario
@@ -183,15 +201,15 @@
     <script src="dash/js/sb-admin-2.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
-        let nombre_global="";
-        let numero_global="";
-        let nombre_servicio="";
+        let nombre_global="AAA";
+        let numero_global="AA";
+        let nombre_servicio="AAA";
         let user_id;
         let service_id;
         let fecha_seleccionada;
         let horas_seleccionada;
-        
-        $("#cita").hide();
+       
+       $("#cita").hide();
         $(document).ready(function () {
         $('#numero_documento').on('input', function () {
             var query = $(this).val();
@@ -248,12 +266,24 @@
                         nombre_global+"-"+numero_global+"-"+nombre_servicio,
                          "success");*/
 
-                         swal(
-                            "Cita Agendada Correctamente", 
-                            nombre_global+"-"+numero_global+"-"+nombre_servicio,  
-                            "success").then(function(){
-                                location.reload();
-                            });
+                         swal({
+    title: "Cita Agendada Correctamente",
+    text:
+        "Nombre: " + nombre_global + "\n" +
+        "No Documento: " + numero_global + "\n" +
+        "Servicio: " + nombre_servicio + "\n\n" +
+        "Una vez agendada su cita, se le notificará vía telefónica o por mensaje de texto",
+    icon: "success",
+    content: {
+        element: "span",
+        attributes: {
+            style: "font-style: italic;"
+        },
+        text: "Una vez agendada su cita, se le notificará vía telefónica o por mensaje de texto"
+    }
+}).then(function(){
+    location.reload();
+});
                          
                     }
                     // Puedes mostrar los resultados en la interfaz de usuario, actualizar una lista, etc.
@@ -271,12 +301,14 @@
             // Obtén los valores de los campos del formulario
             var numeroDocumento = document.getElementById('numero_documento').value;
             var nombresCompletos = document.getElementById('exampleInputPassword').value;
-
+            var telefono_form = document.getElementById('telefono').value;
+            
             // Crea un objeto con los datos a enviar
             var datos = {
                 _token: tokenCSRF,
                 numero_documento: numeroDocumento,
-                nombres_completos: nombresCompletos
+                nombres_completos: nombresCompletos,
+                telefono:telefono_form
                 // Agrega más campos según sea necesario
             };
           
@@ -339,7 +371,6 @@
       },
       dayClick: function(date, jsEvent, view) {
         var dayOfWeek = date.day();
-
         // Verificar si el día está bloqueado
         if (blockedDays.includes(dayOfWeek)) {
           // El día está bloqueado, no realizar ninguna acción
@@ -347,9 +378,6 @@
           console.log("Este día está bloqueado");
         } else {
             $('#exampleModal').modal('show')
-          // El día no está bloqueado, realizar la acción deseada
-         
-          
           $(".fechas_servi").text(date.format());
           fecha_seleccionada=date.format();
         }
@@ -358,8 +386,12 @@
         var dayOfWeek = date.day();
 
         // Verificar si el día está bloqueado y aplicar el estilo correspondiente
-      
-        cell.addClass('custom-day');
+        if (blockedDays.includes(dayOfWeek)) {
+            cell.addClass('blocked-day');
+        } else {
+            cell.addClass('available-day');
+        }
+       
         
       }
     });
@@ -375,27 +407,33 @@
        
 
         function generarHoras(rango) {
-            var selectHoras = document.getElementById("horas");
-            selectHoras.innerHTML = ""; // Limpiar el select antes de llenarlo nuevamente
+    var selectHoras = document.getElementById("horas");
+    selectHoras.innerHTML = ""; // Limpiar el select antes de llenarlo nuevamente
 
-            var horaInicio = 8 * 60; // Convertir 8:00 AM a minutos
-            var horaFin = 18 * 60;   // Convertir 6:00 PM a minutos
+    var horaInicio = 8 * 60; // Convertir 8:00 AM a minutos
+    var horaFin = 18 * 60;   // Convertir 6:00 PM a minutos
 
-            for (var i = horaInicio; i < horaFin; i += rango) {
-            var hora = Math.floor(i / 60); // Obtener las horas
-            var minutos = i % 60;         // Obtener los minutos
+    for (var i = horaInicio; i < horaFin; i += rango) {
+        var hora = Math.floor(i / 60); // Obtener las horas
+        var minutos = i % 60;         // Obtener los minutos
 
-            // Formatear la hora en formato HH:mm
-            var horaFormateada = (hora < 10 ? "0" : "") + hora + ":" + (minutos === 0 ? "00" : minutos);
+        // Excluir horas de 12:00 PM a 2:00 PM
+        if (!(hora >= 12 && hora < 14)) {
+            // Convertir a formato AM/PM
+            var ampm = hora >= 12 ? "PM" : "AM";
+            hora = hora % 12 || 12; // Convertir a formato de 12 horas
+
+            // Formatear la hora en formato hh:mm AM/PM
+            var horaFormateada = (hora < 10 ? "0" : "") + hora + ":" + (minutos === 0 ? "00" : minutos) + " " + ampm;
 
             // Crear una opción y agregarla al select
             var opcion = document.createElement("option");
             opcion.value = horaFormateada;
             opcion.text = horaFormateada;
             selectHoras.add(opcion);
-            }
         }
-    
+    }
+}
 
         $("#services_select").on("change", function(){
                 // Obtiene el valor seleccionado
@@ -432,13 +470,26 @@
 
     // Función para actualizar los días bloqueados
     function updateBusinessHours(dias_bloqueados) {
-     
-      blockedDays=dias_bloqueados
-      $('#calendario').fullCalendar('option', 'businessHours', {
-        dow: [0, 1, 2, 3, 4, 5, 6].filter(day => !blockedDays.includes(day)),
-        start: '00:00',
-        end: '24:00',
-      });
+        blockedDays = dias_bloqueados;
+
+            // Actualizar las horas de trabajo del calendario
+            $('#calendario').fullCalendar('option', 'businessHours', {
+                dow: [0, 1, 2, 3, 4, 5, 6].filter(day => !blockedDays.includes(day)),
+                start: '00:00',
+                end: '24:00',
+            });
+
+            // Configurar la función dayRender para aplicar estilos
+            $('#calendario').fullCalendar('option', 'dayRender', function (date, cell) {
+                var dayOfWeek = date.day();
+
+                // Verificar si el día está bloqueado y aplicar el estilo correspondiente
+                if (blockedDays.includes(dayOfWeek)) {
+                    cell.addClass('blocked-day');
+                } else {
+                    cell.addClass('available-day');
+                }
+            });
     }
   });
 

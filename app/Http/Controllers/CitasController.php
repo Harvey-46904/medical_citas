@@ -21,8 +21,8 @@ class CitasController extends Controller
         ->get();
 
 
-        $totalCitasEnEspera = DB::table("citas")->where('estado', 'En espera')->count();
-        return view('dash.lista_citas',compact("citas","totalCitasEnEspera"));
+        $totalCitasEnEspera=self::notificacion_cita();
+        return view('dash.lista_aprobadas',compact("citas","totalCitasEnEspera"));
         
     }
     public function citas_rechazadas(){
@@ -31,8 +31,8 @@ class CitasController extends Controller
         ->join('servicios','citas.servicio_id','=',"servicios.id")
         ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
         ->get();
-        $totalCitasEnEspera = DB::table("citas")->where('estado', 'En espera')->count();
-        return view('dash.lista_citas',compact("citas","totalCitasEnEspera"));
+        $totalCitasEnEspera=self::notificacion_cita();
+        return view('dash.lista_rechazadas',compact("citas","totalCitasEnEspera"));
     }
 
     /**
@@ -59,10 +59,18 @@ class CitasController extends Controller
         ->where("servicios_disponibilidads.id","=",$request->servicio_id)
         ->first();
        
+
+        $fechaCita = $request->fecha_cita;
+
+        // Utiliza STR_TO_DATE para convertir la cadena de fecha al formato de MySQL
+        $fechaCitaFormateada = DB::raw("STR_TO_DATE('$fechaCita', '%Y-%m-%d %h:%i %p')");
+
+
         $crear_cita=new citas;
         $crear_cita->usuario_id=$request->usuario_id;
         $crear_cita->servicio_id=$citas_id_unico->servicio_id;
-        $crear_cita->fecha_cita=$request->fecha_cita;
+        $crear_cita->fecha_cita= $fechaCitaFormateada;
+        $crear_cita->visibilidad= TRUE;
         $crear_cita->estado="En espera";
         
         $crear_cita->save();
@@ -131,21 +139,26 @@ class CitasController extends Controller
         $citas=DB::table("servicios")
         ->join('servicios_disponibilidads', 'servicios.id', '=', 'servicios_disponibilidads.servicio_id')
         ->select("servicios.id AS id_servi","servicios.nombre_servicio","servicios_disponibilidads.*")
+        ->where("servicios_disponibilidads.visibilidad","=",TRUE)
         ->get();
        
         return view('dash.citas',compact("citas"));
     }
 
-    public function citas_pendientes(){
+    public function citas_pendientes($id){
         $citas = DB::table("citas")->where('estado', 'En espera')
         ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
         ->join('servicios','citas.servicio_id','=',"servicios.id")
         ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
+        ->where("citas.id","=",$id)
         ->get();
 
 
-        $totalCitasEnEspera = DB::table("citas")->where('estado', 'En espera')->count();
+        $totalCitasEnEspera=self::notificacion_cita();
+        
         return view('dash.citas_pendientes',compact("citas","totalCitasEnEspera"));
+        
+
         
     }
 
@@ -160,14 +173,33 @@ class CitasController extends Controller
        
         if($estado_nuevo=="Aprobada"){
             $datos = ['success' => 'Cita Confirmada'];
-
+            return redirect('/citas')->with('success', 'cita aprobada correctamente');
             // Redireccionar a la página anterior con datos flash
             return back()->with($datos);
         }else{
             $datos = ['success' => 'Cita Rechazada'];
+            return redirect('/citas-rechazadas')->with('success', 'cita rechazada correctamente');
             // Redireccionar a la página anterior con datos flash
             return back()->with($datos);
         }
        
+    }
+
+
+    public function notificacion_cita(){
+        $citas = DB::table("citas")->where('estado', 'En espera')
+        ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
+        ->join('servicios','citas.servicio_id','=',"servicios.id")
+        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
+        ->get();
+
+        $user=DB::table("users")->select("name")->where("id","=",1)->first();
+
+
+        $totalCitasEnEspera = count($citas);
+        $citas->total_citas_espera= $totalCitasEnEspera;
+        $citas->username=$user->name;
+        return $citas;
+
     }
 }

@@ -19,7 +19,16 @@ class servicios_disponibilidad extends Model
         'sabado',
         'domingo',
         'limite_servico',
-        'rango_minutos'
+        'rango_minutos',
+        'visibilidad',
+        'profesional_id',
+        'rango_lunes',
+        'rango_martes',
+        'rango_miercoles',
+        'rango_jueves',
+        'rango_viernes',
+        'rango_sabado',
+        'rango_domingo',
     ];
    
 }

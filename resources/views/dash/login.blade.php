@@ -35,10 +35,19 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <div class="col-lg-6  d-flex align-items-center justify-content-center ">
+
+<img src="https://citasmedicas.techmhm.com/dash/img/logo.png" alt="..." width="80%" class="img-thumbnail">
+
+                            </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
+                                    @if(session('success'))
+                                    <div class="alert alert-danger" role="alert">
+                                     El  Email o contraseña digitados son incorrectos
+                                    </div>
+                                    @endif
                                     <h2 class="h4 text-gray-900 mb-4 display-4">Bienvenido</h2>
                                     </div>
                                     <form class="user" method="POST" action="{{route('login')}}">
@@ -50,7 +59,7 @@
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                               placeholder="Password" autocomplete="off" name="pass">
+                                               placeholder="Password" autocomplete="off" name="password">
                                         </div>
                                        
                                           <input class="btn btn-primary btn-user btn-block registro_user"type="submit" value="  Iniciar Sesion">

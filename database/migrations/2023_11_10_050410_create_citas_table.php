@@ -21,9 +21,10 @@ class CreateCitasTable extends Migration
         $table->datetime('fecha_cita');
         $table->timestamps();
         $table->string('estado');
-        $table->foreign('usuario_id')->references('id')->on('usuarios');
-        $table->foreign('servicio_id')->references('id')->on('servicios');
-    
+     
+        $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
+        $table->foreign('servicio_id')->references('id')->on('servicios')->onDelete('cascade');
+        $table->boolean('visibilidad');
         });
     }
 

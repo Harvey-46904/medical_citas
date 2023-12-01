@@ -53,17 +53,20 @@
                     <tr>
                             <td>{{$paciente->cedula}}</td>
                             <td> {{$paciente->nombre_completo}}</td>
-                            <td class="text-center"> 
-                                <a href="#" class="btn btn-warning btn-circle btn-sm">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                    </a>
-                            </td>
                             <td class="text-center">
-                                <a href="#" class="btn btn-danger btn-circle btn-sm">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+                                <a  href="{{ route('usuario.editar', ['id' => $paciente->id]) }}"  class="btn btn-warning btn-circle btn-sm">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                            </a>
+                                </td>
+
+
+                                
+                                <td class="text-center">
+                                <a href="{{ route('usuario.eliminar', ['id' => $paciente->id]) }}"  class="btn btn-danger btn-circle btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
                             </td>
-                     
+                            
                         </tr>
                     @endforeach
                 
@@ -84,7 +87,7 @@
     <div class="modal-content">
       <div class="modal-header">
         
-        <h5 class="modal-title" id="exampleModalLabel">Nuevo Servicio</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Nuevo Paciente</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -102,12 +105,45 @@
                 <input type="text" class="form-control" name="nombres_completos" placeholder="">
                
             </div>
-   
+            <div class="form-group">
+                <label for="exampleInputEmail1">Telefono</label>
+                <input type="text" class="form-control" name="telefono" placeholder="">
+               
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <input type="submit"  class="btn btn-primary" value="Guardar">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-       
-           
-          
-       
+
+<div class="modal fade" id="update_paciente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <h5 class="modal-title" id="exampleModalLabel">Editar Paciente</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form method="POST"   action="{{ route('post_user') }}">
+            @csrf
+            <div class="form-group">
+                <label for="exampleInputEmail1">No Documento</label>
+                <input type="text" class="form-control" name="numero_documento" placeholder="">
+               
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Nombres Completos</label>
+                <input type="text" class="form-control" name="nombres_completos" placeholder="">
+               
+            </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
