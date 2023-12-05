@@ -58,15 +58,29 @@ View::share('parametro', $totalCitasEnEspera);
 
                     <tbody>
 
-                    @php
+                        @php
                         function formatearHoras($cadenaHoras) {
-                            $horas = explode('&', $cadenaHoras);
-                            $horaInicio = date("g:i A", strtotime($horas[0]));
-                            $horaFin = date("g:i A", strtotime($horas[1]));
-
-                            return $horaInicio . ' - ' . $horaFin;
+                        $jornada = explode('A', $cadenaHoras);
+                        $manana=$jornada[0];
+                        $tarde=$jornada[1];
+                        $divicionmanana=explode('&', $manana);
+                        $diviciontarde=explode('&', $tarde);
+                        $horaIniciomanana="";
+                        $horaFinmanana="";
+                        $horaIniciotarde="";
+                        $horaFintarde="";
+                        if($divicionmanana[0] != "" AND $divicionmanana[1] != "" ){
+                            $horaIniciomanana = date("g:i A", strtotime($divicionmanana[0]));
+                            $horaFinmanana = date("g:i A", strtotime($divicionmanana[1]));
                         }
-                    @endphp
+                        if($diviciontarde[0] != "" AND  $diviciontarde[1] != "" ){
+                            $horaIniciotarde = date("g:i A", strtotime($diviciontarde[0]));
+                            $horaFintarde = date("g:i A", strtotime($diviciontarde[1]));
+                        }
+
+                         return "J Diurna: ". $horaIniciomanana . ' - ' . $horaFinmanana.'<hr>J Tarde: '.$horaIniciotarde . ' - ' . $horaFintarde ;
+                        }
+                        @endphp
                         @foreach($consultas as $consulta)
                         <tr>
                             <td>{{$consulta->nombre_profesinal}}</td>
@@ -77,8 +91,9 @@ View::share('parametro', $totalCitasEnEspera);
                                 @if($consulta->lunes==1)
                                 <a href="#" class="btn btn-success btn-circle btn-sm">
                                     <i class="fas fa-check"></i>
-                                </a><hr>
-                               {{formatearHoras($consulta->rango_lunes)}} 
+                                </a>
+                                <hr>
+                                {!!formatearHoras($consulta->rango_lunes)!!}
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -89,8 +104,9 @@ View::share('parametro', $totalCitasEnEspera);
                                 @if($consulta->martes==1)
                                 <a href="#" class="btn btn-success btn-circle btn-sm">
                                     <i class="fas fa-check"></i>
-                                </a><hr>
-                                {{formatearHoras($consulta->rango_martes)}} 
+                                </a>
+                                <hr>
+                                {!!formatearHoras($consulta->rango_martes)!!}
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -101,8 +117,9 @@ View::share('parametro', $totalCitasEnEspera);
                                 @if($consulta->miercoles==1)
                                 <a href="#" class="btn btn-success btn-circle btn-sm">
                                     <i class="fas fa-check"></i>
-                                </a><hr>
-                                {{formatearHoras($consulta->rango_miercoles)}} 
+                                </a>
+                                <hr>
+                                {!!formatearHoras($consulta->rango_miercoles)!!}
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -113,8 +130,9 @@ View::share('parametro', $totalCitasEnEspera);
                                 @if($consulta->jueves==1)
                                 <a href="#" class="btn btn-success btn-circle btn-sm">
                                     <i class="fas fa-check"></i>
-                                </a><hr>
-                                {{formatearHoras($consulta->rango_jueves)}} 
+                                </a>
+                                <hr>
+                                {!!formatearHoras($consulta->rango_jueves)!!}
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -125,8 +143,9 @@ View::share('parametro', $totalCitasEnEspera);
                                 @if($consulta->viernes==1)
                                 <a href="#" class="btn btn-success btn-circle btn-sm">
                                     <i class="fas fa-check"></i>
-                                </a><hr>
-                                {{formatearHoras($consulta->rango_viernes)}} 
+                                </a>
+                                <hr>
+                                {!!formatearHoras($consulta->rango_viernes)!!}
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -137,8 +156,9 @@ View::share('parametro', $totalCitasEnEspera);
                                 @if($consulta->sabado==1)
                                 <a href="#" class="btn btn-success btn-circle btn-sm">
                                     <i class="fas fa-check"></i>
-                                </a><hr>
-                                {{formatearHoras($consulta->rango_sabado)}} 
+                                </a>
+                                <hr>
+                                {!!formatearHoras($consulta->rango_sabado)!!}
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -149,8 +169,9 @@ View::share('parametro', $totalCitasEnEspera);
                                 @if($consulta->domingo==1)
                                 <a href="#" class="btn btn-success btn-circle btn-sm">
                                     <i class="fas fa-check"></i>
-                                </a><hr>
-                                {{formatearHoras($consulta->rango_domingo)}} 
+                                </a>
+                                <hr>
+                                {!!formatearHoras($consulta->rango_domingo)!!}
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -202,14 +223,14 @@ View::share('parametro', $totalCitasEnEspera);
                     @csrf
 
                     <div class="form-group">
-                                <label for="exampleFormControlSelect1">Seleccione el profesional encargado</label>
-                                <select class="form-control" id="services_select" name="profesional">
-                                <option disabled selected > Seleccione el profesional</option>
-                                @foreach($profesionales as $profesional)
-                                <option value="{{$profesional->id}}">{{$profesional->nombre_profesinal}}</option>
-                                @endforeach
-                                </select>
-                            </div>
+                        <label for="exampleFormControlSelect1">Seleccione el profesional encargado</label>
+                        <select class="form-control" id="services_select" name="profesional">
+                            <option disabled selected> Seleccione el profesional</option>
+                            @foreach($profesionales as $profesional)
+                            <option value="{{$profesional->id}}">{{$profesional->nombre_profesinal}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Nombre Servicio</label>
                         <input type="text" class="form-control" name="nombre" placeholder="">
@@ -228,89 +249,70 @@ View::share('parametro', $totalCitasEnEspera);
                     <div class="form-group">
                         <label for="exampleInputPassword1">Marque los dias de actividad del servicio</label>
                     </div>
+
+                    @php
+                        $diasSemana = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
+                        $totalDias = count($diasSemana);
+                    @endphp
+
+
+                    @for ($i = 0; $i < $totalDias; $i++)
+                   
+
+
                     <div class="row">
-    <div class="col-md-12">
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="lunes" id="lunesCheckbox">
-            <label class="form-check-label" for="lunesCheckbox">Lunes</label>
-            <div class="d-flex align-items-center">
-                <label for="horaDesdeLunes">Desde:</label>
-                <input type="time" class="form-control" id="horaDesdeLunes" name="horaDesdeLunes" style="display: none;">
+                        <div class="col-md-12">
+                            <div class="form-check">
+                                <input class="form-check-input dias" type="checkbox" id="d{{$i}}" name=" {{  $diasSemana[$i]}}">
+                                <label class="form-check-label" for="defaultCheck{{$i}}">
+                               {{  $diasSemana[$i]}}
+                                </label>
+                            </div>
+                            <ul id="jornada{{$i}}" style="display: none;">
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input dn" type="checkbox" id="m{{$i}}">
+                                        <label class="form-check-label" for="defaultCheck{{$i}}">
+                                            Mañana
+                                        </label>
+                                    </div>
+                                    <ul id="manana{{$i}}" style="display: none;">
+                                        <li>
+                                            <div class="d-flex align-items-center">
+                                                <label for="horaDesdeLunes">Desde:</label>
+                                                <input type="time" class="form-control" name="mananafinaldesde{{$i}}">
 
-                <label for="horaHastaLunes" class="ml-2">Hasta:</label>
-                <input type="time" class="form-control" id="horaHastaLunes" name="horaHastaLunes" style="display: none;">
-            </div>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="martes" id="martesCheckbox">
-            <label class="form-check-label" for="martesCheckbox">Martes</label>
-            <div class="d-flex align-items-center">
-                <label for="horaDesdeMartes">Desde:</label>
-                <input type="time" class="form-control" id="horaDesdeMartes" name="horaDesdeMartes" style="display: none;">
+                                                <label for="horaHastaLunes" class="ml-2">Hasta:</label>
+                                                <input type="time" class="form-control" name="mananafinalhasta{{$i}}">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input dn " type="checkbox" id="t{{$i}}">
+                                        <label class="form-check-label" for="defaultCheck{{$i}}">
+                                            Tarde
+                                        </label>
+                                    </div>
+                                    <ul id="tarde{{$i}}" style="display: none;">
+                                        <li>
+                                            <div class="d-flex align-items-center">
+                                                <label for="horaDesdeLunes">Desde:</label>
+                                                <input type="time" class="form-control" name="tardefinaldesde{{$i}}">
 
-                <label for="horaHastaMartes" class="ml-2">Hasta:</label>
-                <input type="time" class="form-control" id="horaHastaMartes" name="horaHastaMartes" style="display: none;">
-            </div>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="miercoles" id="miercolesCheckbox">
-            <label class="form-check-label" for="miercolesCheckbox">Miércoles</label>
-            <div class="d-flex align-items-center">
-                <label for="horaDesdeMiercoles">Desde:</label>
-                <input type="time" class="form-control" id="horaDesdeMiercoles" name="horaDesdeMiercoles" style="display: none;">
+                                                <label for="horaHastaLunes" class="ml-2">Hasta:</label>
+                                                <input type="time" class="form-control" name="tardefinalhasta{{$i}}">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
 
-                <label for="horaHastaMiercoles" class="ml-2">Hasta:</label>
-                <input type="time" class="form-control" id="horaHastaMiercoles" name="horaHastaMiercoles" style="display: none;">
-            </div>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="jueves" id="juevesCheckbox">
-            <label class="form-check-label" for="juevesCheckbox">Jueves</label>
-            <div class="d-flex align-items-center">
-                <label for="horaDesdeJueves">Desde:</label>
-                <input type="time" class="form-control" id="horaDesdeJueves" name="horaDesdeJueves" style="display: none;">
-
-                <label for="horaHastaJueves" class="ml-2">Hasta:</label>
-                <input type="time" class="form-control" id="horaHastaJueves" name="horaHastaJueves" style="display: none;">
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="viernes" id="viernesCheckbox" >
-            <label class="form-check-label" for="viernesCheckbox">Viernes</label>
-            <div class="d-flex align-items-center">
-                <label for="horaDesdeViernes">Desde:</label>
-                <input type="time" class="form-control" id="horaDesdeViernes" name="horaDesdeViernes" style="display: none;">
-
-                <label for="horaHastaViernes" class="ml-2">Hasta:</label>
-                <input type="time" class="form-control" id="horaHastaViernes" name="horaHastaViernes" style="display: none;">
-            </div>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="sabado" id="sabadoCheckbox">
-            <label class="form-check-label" for="sabadoCheckbox">Sábado</label>
-            <div class="d-flex align-items-center">
-                <label for="horaDesdeSabado">Desde:</label>
-                <input type="time" class="form-control" id="horaDesdeSabado" name="horaDesdeSabado" style="display: none;">
-
-                <label for="horaHastaSabado" class="ml-2">Hasta:</label>
-                <input type="time" class="form-control" id="horaHastaSabado" name="horaHastaSabado" style="display: none;">
-            </div>
-        </div>
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="domingo" id="domingoCheckbox">
-            <label class="form-check-label" for="domingoCheckbox">Domingo</label>
-            <div class="d-flex align-items-center">
-                <label for="horaDesdeDomingo">Desde:</label>
-                <input type="time" class="form-control" id="horaDesdeDomingo" name="horaDesdeDomingo" style="display: none;">
-
-                <label for="horaHastaDomingo" class="ml-2">Hasta:</label>
-                <input type="time" class="form-control" id="horaHastaDomingo" name="horaHastaDomingo" style="display: none;">
-            </div>
-        </div>
-    </div>
-</div>
+                        </div>
+                    </div>
+                    @endfor
+                    
 
 
 
@@ -326,36 +328,66 @@ View::share('parametro', $totalCitasEnEspera);
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     // Mostrar u ocultar campos "Desde" y "Hasta" según el estado del checkbox
-    $(document).ready(function() {
-        $('#lunesCheckbox').change(function() {
-            $('#horaDesdeLunes, #horaHastaLunes').toggle(this.checked);
+    $(document).ready(function () {
+        $('.dias').change(function () {
+            var id = this.id;
+            var ultimoDigito = id.charAt(id.length - 1);
+            if (this.checked) {
+                console.log("number", ultimoDigito);
+                activar_jornadas(ultimoDigito, 1);
+            } else {
+                activar_jornadas(ultimoDigito, 0);
+
+            }
         });
 
-        $('#martesCheckbox').change(function() {
-            $('#horaDesdeMartes, #horaHastaMartes').toggle(this.checked);
-        });
-
-        $('#miercolesCheckbox').change(function() {
-            $('#horaDesdeMiercoles, #horaHastaMiercoles').toggle(this.checked);
-        });
-
-        $('#juevesCheckbox').change(function() {
-            $('#horaDesdeJueves, #horaHastaJueves').toggle(this.checked);
-        });
-
-        $('#viernesCheckbox').change(function() {
-            $('#horaDesdeViernes, #horaHastaViernes').toggle(this.checked);
-        });
-
-        $('#sabadoCheckbox').change(function() {
-            $('#horaDesdeSabado, #horaHastaSabado').toggle(this.checked);
-        });
-
-        $('#domingoCheckbox').change(function() {
-            $('#horaDesdeDomingo, #horaHastaDomingo').toggle(this.checked);
+        $('.dn').change(function () {
+            var id = this.id;
+            if (this.checked) {
+                diurna_nocturna(id, 1)
+            } else {
+                diurna_nocturna(id, 0)
+            }
         });
 
         // Repite el patrón para los demás días
     });
+    function activar_jornadas(dia, bolean) {
+        if (bolean == 1) {
+            var clase = "#jornada" + dia
+            $(clase).css("display", "block");
+        } else {
+            var clase = "#jornada" + dia
+            $(clase).css("display", "none");
+        }
+    }
+
+    function diurna_nocturna(dia, bolean) {
+        var primerDigito = dia.charAt(0);
+        var ultimoDigito = dia.charAt(dia.length - 1);
+        console.log(primerDigito);
+        if (bolean == 1) {
+            if (primerDigito == "m") {
+                var clase = "#manana" + ultimoDigito
+                console.log(clase);
+                $(clase).css("display", "block");
+            } else {
+                var clase = "#tarde" + ultimoDigito
+                console.log(clase);
+                $(clase).css("display", "block");
+            }
+
+        } else {
+            if (primerDigito == "m") {
+                var clase = "#manana" + ultimoDigito
+                console.log(clase);
+                $(clase).css("display", "none");
+            } else {
+                var clase = "#tarde" + ultimoDigito
+                console.log(clase);
+                $(clase).css("display", "none");
+            }
+        }
+    }
 </script>
 @endsection

@@ -54,7 +54,7 @@ class ServiciosController extends Controller
     public function store(Request $request)
     {
        
-
+        //return response(["data"=>$request->all()]);
         $new_servicio=new servicios;
         $new_servicio->nombre_servicio=$request->nombre;
         $new_servicio->save();
@@ -63,20 +63,20 @@ class ServiciosController extends Controller
            'servicio_id'=>$new_servicio->id,
 
            'profesional_id'=>$request->profesional,
-           'lunes'=>$request->lunes=="on"?1:0,
-           'rango_lunes'=>$request->lunes=="on"?$request->horaDesdeLunes."&".$request->horaHastaLunes:NULL,
-           'martes'=>$request->martes=="on"?1:0,
-           'rango_martes'=>$request->martes=="on"?$request->horaDesdeMartes."&".$request->horaHastaMartes:NULL,
-           'miercoles'=>$request->miercoles=="on"?1:0,
-           'rango_miercoles'=>$request->miercoles=="on"?$request->horaDesdeMiercoles."&".$request->horaHastaMiercoles:NULL,
-           'jueves'=>$request->jueves=="on"?1:0,
-           'rango_jueves'=>$request->jueves=="on"?$request->horaDesdeJueves."&".$request->horaHastaJueves:NULL,
-           'viernes'=>$request->viernes=="on"?1:0,
-           'rango_viernes'=>$request->viernes=="on"?$request->horaDesdeViernes."&".$request->horaHastaViernes:NULL,
-           'sabado'=>$request->sabado=="on"?1:0,
-           'rango_sabado'=>$request->sabado=="on"?$request->horaDesdeSabado."&".$request->horaHastaSabado:NULL,
-           'domingo'=>$request->domingo=="on"?1:0,
-           'rango_domingo'=>$request->domingo=="on"?$request->horaDesdeDomingo."&".$request->horaHastaDomingo:NULL,
+           'lunes'=>$request->Lunes=="on"?1:0,
+           'rango_lunes'=>$request->Lunes=="on"?$request->mananafinaldesde0."&".$request->mananafinalhasta0."A".$request->tardefinaldesde0."&".$request->tardefinalhasta0:NULL,
+           'martes'=>$request->Martes=="on"?1:0,
+           'rango_martes'=>$request->Martes=="on"?$request->mananafinaldesde1."&".$request->mananafinalhasta1."A".$request->tardefinaldesde1."&".$request->tardefinalhasta1:NULL,
+           'miercoles'=>$request->Miercoles=="on"?1:0,
+           'rango_miercoles'=>$request->Miercoles=="on"?$request->mananafinaldesde2."&".$request->mananafinalhasta2."A".$request->tardefinaldesde2."&".$request->tardefinalhasta2:NULL,
+           'jueves'=>$request->Jueves=="on"?1:0,
+           'rango_jueves'=>$request->Jueves=="on"?$request->mananafinaldesde3."&".$request->mananafinalhasta3."A".$request->tardefinaldesde3."&".$request->tardefinalhasta3:NULL,
+           'viernes'=>$request->Viernes=="on"?1:0,
+           'rango_viernes'=>$request->Viernes=="on"?$request->mananafinaldesde4."&".$request->mananafinalhasta4."A".$request->tardefinaldesde4."&".$request->tardefinalhasta4:NULL,
+           'sabado'=>$request->Sabado=="on"?1:0,
+           'rango_sabado'=>$request->Sabado=="on"?$request->mananafinaldesde5."&".$request->mananafinalhasta5."A".$request->tardefinaldesde5."&".$request->tardefinalhasta5:NULL,
+           'domingo'=>$request->Domingo=="on"?1:0,
+           'rango_domingo'=>$request->Domingo=="on"?$request->mananafinaldesde6."&".$request->mananafinalhasta6."A".$request->tardefinaldesde6."&".$request->tardefinalhasta6:NULL,
            'limite_servico'=>$request->limite,
            'rango_minutos'=>$request->rango,
            'visibilidad'=>TRUE,
