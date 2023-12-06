@@ -234,7 +234,7 @@
         let fecha_seleccionada;
         let horas_seleccionada;
        
-      // $("#cita").hide();
+       $("#cita").hide();
         $(document).ready(function () {
         $('#numero_documento').on('input', function () {
             var query = $(this).val();
