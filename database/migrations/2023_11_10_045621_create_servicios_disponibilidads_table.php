@@ -16,9 +16,9 @@ class CreateServiciosDisponibilidadsTable extends Migration
         Schema::create('servicios_disponibilidads', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('servicio_id');
-            $table->foreign('servicio_id')->references('id')->on('servicios');
+            $table->foreign('servicio_id')->references('id')->on('servicios')->onDelete('cascade');;
             $table->unsignedBigInteger('profesional_id');
-            $table->foreign('profesional_id')->references('id')->on('profesionales');
+            $table->foreign('profesional_id')->references('id')->on('profesionales')->onDelete('cascade');;
             $table->boolean('lunes')->default(false);
             $table->string("rango_lunes")->nullable();
             $table->boolean('martes')->default(false);

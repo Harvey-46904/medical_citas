@@ -62,5 +62,8 @@ Route::get('credenciales',"UserController@edit")->name("users.edit");
 Route::post('cambio/{id}',"UserController@update")->name("users.actualizar");
 
 Route::get('deleteprofesional/{id}',"ProfesionalesController@destroy")->name("profesional.eliminar");
+Route::get('deletecita/{id}',"CitasController@destroy")->name("citausuario.eliminar");
+
+
 Route::get('editarprofesional/{id}',"ProfesionalesController@edit")->name("profesional.editar");
 Route::post('profesionalactualizar/{id}',"ProfesionalesController@update")->name("profesional.actualizar");

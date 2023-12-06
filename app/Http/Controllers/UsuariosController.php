@@ -23,7 +23,15 @@ class UsuariosController extends Controller
     }
     public function buscarDocumento($documento){
         $paciente=DB::table("usuarios")->select("nombre_completo","id")->where("cedula","=",$documento)->first();
-        return response(["data"=>$paciente]);
+
+       
+        $citas=DB::table("citas")
+        ->join("usuarios","citas.usuario_id","=","usuarios.id")
+        ->join("servicios","citas.servicio_id","=","servicios.id")
+        ->where("usuarios.cedula","=",$documento)
+        ->select("citas.id","usuarios.cedula","servicios.nombre_servicio","usuarios.nombre_completo","citas.fecha_cita","citas.estado")
+        ->get();
+        return response(["data"=>$paciente,"cita"=>$citas]);
     }
     /**
      * Show the form for creating a new resource.

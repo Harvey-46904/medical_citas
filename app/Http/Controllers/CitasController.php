@@ -130,9 +130,12 @@ class CitasController extends Controller
      * @param  \App\Models\citas  $citas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(citas $citas)
+    public function destroy($id)
     {
-        //
+        $cita_eliminiada=DB::table("citas")
+        ->where("citas.id","=",$id)
+        ->delete();
+        return response(["data"=>"cita eliminada"]);
     }
 
     public function crear_cita(){

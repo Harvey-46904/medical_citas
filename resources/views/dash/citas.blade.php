@@ -141,6 +141,31 @@
                        
                     </div>
                 </div>
+
+
+            </div>
+
+            <div class="row justify-content-center" id="tabla_de_citas" style="display: none;">
+                <div class="col-md-11">
+                <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+
+                            <th class="text-center">Documento</th>
+                            <th class="text-center">Nombre Completo</th>
+                            <th class="text-center">Servicio</th>
+                            <th class="text-center">Fecha</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center">Eliminar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+                </div>
             </div>
         </div>
     </div>
@@ -209,7 +234,7 @@
         let fecha_seleccionada;
         let horas_seleccionada;
        
-       $("#cita").hide();
+      // $("#cita").hide();
         $(document).ready(function () {
         $('#numero_documento').on('input', function () {
             var query = $(this).val();
@@ -226,8 +251,13 @@
                             numero_global=query;
                         nombre_global=data.data.nombre_completo;
                         user_id=data.data.id;
-                        
-                        
+                        console.log("tabla",data.cita);
+                        if(data.cita.length >0){
+                            $("#tabla_de_citas").show();
+                            crear_tabla(data.cita)
+                        }
+                       
+                      
                         $(".nombres").text(nombre_global);
                         $("#cita_documento").val(numero_global).prop("readonly", true);
                         $(".cita_documento2").text(numero_global);
@@ -243,6 +273,88 @@
                 });
             }
         });
+
+        function crear_tabla(datos){
+            // Obtén una referencia al tbody de la tabla
+            var tbody = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+
+            // Recorre el array y agrega filas a la tabla
+            for (var i = 0; i < datos.length; i++) {
+                var fila = tbody.insertRow(tbody.rows.length); // Inserta una nueva fila al final
+
+                // Inserta celdas en la fila con la información correspondiente
+                var celdaDocumento = fila.insertCell(0);
+                var celdaNombre = fila.insertCell(1);
+                var celdaservicio = fila.insertCell(2);
+                var celdaFecha = fila.insertCell(3);
+                var celdaestado = fila.insertCell(4);
+                var celdaeliminar = fila.insertCell(5);
+              
+
+                // Asigna los valores del array a las celdas
+                celdaDocumento.textContent = datos[i].cedula;
+                celdaNombre.textContent = datos[i].nombre_completo;
+                celdaservicio.textContent = datos[i].nombre_servicio;
+                celdaFecha.textContent = datos[i].fecha_cita;
+                celdaestado.textContent = datos[i].estado;
+                //celdaeliminar.textContent = datos[i].id;
+
+                var botonEliminar = document.createElement('button');
+    botonEliminar.textContent = 'Cancelar';
+    botonEliminar.setAttribute('data-id', datos[i].id); // Asigna el ID del dato al botón
+    botonEliminar.classList.add('btn'); 
+    botonEliminar.classList.add('btn-danger'); 
+    // Agrega el evento onclick al botón llamando a la función handleEliminarClick
+    botonEliminar.onclick = function () {
+        var id = this.getAttribute('data-id');
+       
+        handleEliminarClick(id);
+    };
+
+    // Asigna el botón a la celda
+    celdaeliminar.appendChild(botonEliminar);
+                
+            }
+        }
+        // Función para manejar el clic del botón
+        function handleEliminarClick(ids) {
+            swal({
+                title: "¿Desea cancelar esta cita?",
+                text: "Una vez cancelado, no podrá revertir el proceso",
+                icon: "warning",
+                buttons: {
+                    cancel: "No",
+                    confirm: "Sí"
+                },
+                dangerMode: true,
+                
+                })
+                .then((willDelete) => {
+                if (willDelete) {
+                    var query=ids;
+                    $.ajax({
+                            url: '{{ route('citausuario.eliminar', ['id' => 'ids']) }}'.replace('ids', query),
+                            method: 'GET',
+                            success: function (data) {
+                                if(data.data!=null){
+                                    console.log(data.data);
+                                    location.reload();
+                            }
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+                } else {
+                    
+                }
+                });
+
+
+
+          
+        }
+        
 
         $(".guardar_citas").on('click',function(){
             var tokenCSRF = document.getElementById('formularioRegistro').querySelector('[name="_token"]').value;
@@ -346,8 +458,8 @@
 <script>
      let datosDesdePHP = @json($citas);
 
-
- 
+    let rango_de_cita=0;
+    let servicio_seleccionado_todo;
     $(document).ready(function() {
 
        
@@ -371,31 +483,73 @@
       },
       dayClick: function(date, jsEvent, view) {
         var dayOfWeek = date.day();
+        var dia = date.format("dddd");
+        var today = moment();
+       
         // Verificar si el día está bloqueado
-        if (blockedDays.includes(dayOfWeek)) {
+        if (blockedDays.includes(dayOfWeek) || !date.isSame(today.clone().add(1, 'day'), 'day')) {
           // El día está bloqueado, no realizar ninguna acción
          
           console.log("Este día está bloqueado");
         } else {
+            console.log(dia);
+           let rango_nuevo= dia_seleccionado_dar_horas(dia);
+            generarHoras(rango_nuevo,rango_de_cita);
             $('#exampleModal').modal('show')
           $(".fechas_servi").text(date.format());
           fecha_seleccionada=date.format();
         }
       },
       dayRender: function (date, cell) {
-        var dayOfWeek = date.day();
+        /*var dayOfWeek = date.day();
 
         // Verificar si el día está bloqueado y aplicar el estilo correspondiente
         if (blockedDays.includes(dayOfWeek)) {
             cell.addClass('blocked-day');
         } else {
             cell.addClass('available-day');
+        }*/
+        var today = moment();
+        var dayOfWeek = date.day();
+        // Verificar si el día está bloqueado, o no es el día siguiente
+        if (blockedDays.includes(dayOfWeek) || !date.isSame(today.clone().add(1, 'day'), 'day')) {
+            cell.addClass('blocked-day');
+        } else {
+            cell.addClass('available-day');
         }
-       
         
       }
     });
 
+
+    function dia_seleccionado_dar_horas(dia){
+      
+        let rangos_utiles;
+        switch (dia) {
+                case "lunes":
+                    rangos_utiles=servicio_seleccionado_todo.rango_lunes;
+                break;
+                case "martes":
+                    rangos_utiles=servicio_seleccionado_todo.rango_martes
+                break;
+                case "miércoles":
+                    rangos_utiles=servicio_seleccionado_todo.rango_miercoles
+                break;
+                case "jueves":
+                    rangos_utiles=servicio_seleccionado_todo.rango_jueves
+                break;
+                case "viernes":
+                    rangos_utiles=servicio_seleccionado_todo.rango_viernes
+                break;
+                case "sábado":
+                    rangos_utiles=servicio_seleccionado_todo.rango_sabado
+                break;
+                case "domingo":
+                    rangos_utiles=servicio_seleccionado_todo.rango_domingo
+                break;
+        }
+        return rangos_utiles;
+    }
     // Manejar cambios en el multiselect
         function filtrarPorId(idSeleccionado) {
             return datosDesdePHP.filter(function(servicio) {
@@ -406,25 +560,35 @@
         let calendar;
        
 
-        function generarHoras(rango) {
+        function generarHoras(rango,tiems) {
     var selectHoras = document.getElementById("horas");
     selectHoras.innerHTML = ""; // Limpiar el select antes de llenarlo nuevamente
 
-    var horaInicio = 8 * 60; // Convertir 8:00 AM a minutos
-    var horaFin = 18 * 60;   // Convertir 6:00 PM a minutos
+    // Dividir el rango en mañana y tarde
+    var rangos = rango.split("A");
+    if (rangos.length !== 2) {
+        console.error("Formato de rango incorrecto. Debe ser 'mañana&tarde'.");
+        return;
+    }
 
-    for (var i = horaInicio; i < horaFin; i += rango) {
-        var hora = Math.floor(i / 60); // Obtener las horas
-        var minutos = i % 60;         // Obtener los minutos
+    // Procesar la mañana
+    procesarRango(rangos[0], "AM");
 
-        // Excluir horas de 12:00 PM a 2:00 PM
-        if (!(hora >= 12 && hora < 14)) {
-            // Convertir a formato AM/PM
-            var ampm = hora >= 12 ? "PM" : "AM";
-            hora = hora % 12 || 12; // Convertir a formato de 12 horas
+    // Procesar la tarde
+    procesarRango(rangos[1], "PM");
+
+    // Función para procesar un rango específico y agregar las opciones al select
+    function procesarRango(rangoHora, ampm) {
+        var [desde, hasta] = rangoHora.split("&");
+        var horaInicio = convertirAMinutos(desde);
+        var horaFin = convertirAMinutos(hasta);
+
+        for (var i = horaInicio; i < horaFin; i += tiems) {
+            var hora = Math.floor(i / 60); // Obtener las horas
+            var minutos = i % 60;         // Obtener los minutos
 
             // Formatear la hora en formato hh:mm AM/PM
-            var horaFormateada = (hora < 10 ? "0" : "") + hora + ":" + (minutos === 0 ? "00" : minutos) + " " + ampm;
+            var horaFormateada = formatearHora(hora, minutos, ampm);
 
             // Crear una opción y agregarla al select
             var opcion = document.createElement("option");
@@ -432,6 +596,18 @@
             opcion.text = horaFormateada;
             selectHoras.add(opcion);
         }
+    }
+
+    // Función para convertir una hora en formato HH:mm a minutos desde la medianoche
+    function convertirAMinutos(hora) {
+        var [hh, mm] = hora.split(":");
+        return parseInt(hh, 10) * 60 + parseInt(mm, 10);
+    }
+
+    // Función para formatear la hora en formato hh:mm AM/PM
+    function formatearHora(hora, minutos, ampm) {
+        hora = hora % 12 || 12; // Convertir a formato de 12 horas
+        return (hora < 10 ? "0" : "") + hora + ":" + (minutos === 0 ? "00" : minutos) + " " + ampm;
     }
 }
 
@@ -443,9 +619,11 @@
                 var diasSemana = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
                 serviciosFiltrados=serviciosFiltrados[0]
                 console.log(serviciosFiltrados);
+                servicio_seleccionado_todo=serviciosFiltrados;
                 nombre_servicio=serviciosFiltrados.nombre_servicio;
                 service_id=serviciosFiltrados.id;
-                generarHoras(serviciosFiltrados.rango_minutos);
+                rango_de_cita=serviciosFiltrados.rango_minutos;
+                
                 $(".nombre_serviciofil").text(serviciosFiltrados.nombre_servicio)
                 
                 
@@ -470,27 +648,31 @@
 
     // Función para actualizar los días bloqueados
     function updateBusinessHours(dias_bloqueados) {
-        blockedDays = dias_bloqueados;
+    // Obtener el día actual
+    var today = moment();
 
-            // Actualizar las horas de trabajo del calendario
-            $('#calendario').fullCalendar('option', 'businessHours', {
-                dow: [0, 1, 2, 3, 4, 5, 6].filter(day => !blockedDays.includes(day)),
-                start: '00:00',
-                end: '24:00',
-            });
+    // Guardar los días bloqueados específicos
+    blockedDays = dias_bloqueados;
 
-            // Configurar la función dayRender para aplicar estilos
-            $('#calendario').fullCalendar('option', 'dayRender', function (date, cell) {
-                var dayOfWeek = date.day();
+    // Actualizar las horas de trabajo del calendario
+    $('#calendario').fullCalendar('option', 'businessHours', {
+        dow: [0, 1, 2, 3, 4, 5, 6].filter(day => !blockedDays.includes(day)),
+        start: '00:00',
+        end: '24:00',
+    });
 
-                // Verificar si el día está bloqueado y aplicar el estilo correspondiente
-                if (blockedDays.includes(dayOfWeek)) {
-                    cell.addClass('blocked-day');
-                } else {
-                    cell.addClass('available-day');
-                }
-            });
-    }
+    // Configurar la función dayRender para aplicar estilos
+    $('#calendario').fullCalendar('option', 'dayRender', function (date, cell) {
+        var dayOfWeek = date.day();
+
+        // Verificar si el día está bloqueado, o no es el día siguiente
+        if (blockedDays.includes(dayOfWeek) || !date.isSame(today.clone().add(1, 'day'), 'day')) {
+            cell.addClass('blocked-day');
+        } else {
+            cell.addClass('available-day');
+        }
+    });
+}
   });
 
 </script>
