@@ -22,14 +22,14 @@ View::share('parametro', $totalCitasEnEspera);
             @endif
             <div class="row justify-content-between">
                 <div class="col-md-3 align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">Lista de profesional </h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Lista de profesionales </h6>
                 </div>
                 <div class="col-md-3"> <a href="#" class="btn btn-success btn-icon-split" data-toggle="modal"
                         data-target="#exampleModal">
                         <span class="icon text-white-50">
                             <i class="fas fa-check"></i>
                         </span>
-                        <span class="text">Crear Profeional</span>
+                        <span class="text">Crear profesional</span>
                     </a></div>
             </div>
 
