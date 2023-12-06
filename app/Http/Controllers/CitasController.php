@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\citas;
 use Illuminate\Http\Request;
 use DB;
+use Carbon\Carbon;
 class CitasController extends Controller
 {
     /**
@@ -204,6 +205,20 @@ class CitasController extends Controller
         $citas->total_citas_espera= $totalCitasEnEspera;
         $citas->username=$user->name;
         return $citas;
+    }
+    public function horas_disponibles($id_servicio,$fecha_consulta){
+        $fechaParametro = $fecha_consulta;
 
+        // Consulta para obtener los registros de la fecha proporcionada
+        $registros = DB::table('citas')
+            //->where("servicio_id","=",$id_servicio)
+            ->whereDate('fecha_cita', $fechaParametro)
+            ->get();
+            return response(["data"=>$registros]);
+        // Obtener solo la hora de los registros
+        $horas = $registros->map(function ($registro) {
+            return Carbon::parse($registro->fecha_cita)->format('H:i');
+        });
+        
     }
 }

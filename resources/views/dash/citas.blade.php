@@ -67,7 +67,7 @@
                                     <form class="user" id="formularioRegistro">
                                         @csrf
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user"
+                                            <input type="number" class="form-control form-control-user"
                                                 id="numero_documento" 
                                                 placeholder="Número de documento" autocomplete="off">
                                         </div>
@@ -248,8 +248,9 @@
                         // Maneja los resultados y actualiza la interfaz de usuario
                        
                         if(data.data!=null){
-                            numero_global=query;
+                         
                         nombre_global=data.data.nombre_completo;
+                        numero_global=data.data.cedula;
                         user_id=data.data.id;
                         console.log("tabla",data.cita);
                         if(data.cita.length >0){
@@ -492,7 +493,23 @@
          
           console.log("Este día está bloqueado");
         } else {
+            console.log(date.format());
             console.log(dia);
+            $.ajax({
+                            url: '{{ route('cita.hora_disponible', ['id_servicio' => '2','fecha_consulta'=>'date.format()']) }}',
+                            method: 'GET',
+                            success: function (data) {
+                                if(data.data!=null){
+                                    console.log("hpras disponibles");
+                                    console.log(data.data);
+                                   
+                            }
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+             });
+
            let rango_nuevo= dia_seleccionado_dar_horas(dia);
             generarHoras(rango_nuevo,rango_de_cita);
             $('#exampleModal').modal('show')

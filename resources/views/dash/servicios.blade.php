@@ -78,7 +78,7 @@ View::share('parametro', $totalCitasEnEspera);
                             $horaFintarde = date("g:i A", strtotime($diviciontarde[1]));
                         }
 
-                         return "J Diurna: ". $horaIniciomanana . ' - ' . $horaFinmanana.'<hr>J Tarde: '.$horaIniciotarde . ' - ' . $horaFintarde ;
+                         return "J Diurna: ". $horaIniciomanana . ' - ' . $horaFinmanana.'  -  J Tarde: '.$horaIniciotarde . ' - ' . $horaFintarde ;
                         }
                         @endphp
                         @foreach($consultas as $consulta)
@@ -89,11 +89,9 @@ View::share('parametro', $totalCitasEnEspera);
                             <td class="text-center">{{$consulta->rango_minutos}} min</td>
                             <td class="text-center">
                                 @if($consulta->lunes==1)
-                                <a href="#" class="btn btn-success btn-circle btn-sm">
+                                <a  class="btn btn-success btn-circle btn-sm modal_show" data-id="{!!formatearHoras($consulta->rango_lunes)!!}">
                                     <i class="fas fa-check"></i>
                                 </a>
-                                <hr>
-                                {!!formatearHoras($consulta->rango_lunes)!!}
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -102,11 +100,11 @@ View::share('parametro', $totalCitasEnEspera);
                             </td>
                             <td class="text-center">
                                 @if($consulta->martes==1)
-                                <a href="#" class="btn btn-success btn-circle btn-sm">
+                                <a href="#" class="btn btn-success btn-circle btn-sm modal_show" data-id="{!!formatearHoras($consulta->rango_martes)!!}">
                                     <i class="fas fa-check"></i>
                                 </a>
                                 <hr>
-                                {!!formatearHoras($consulta->rango_martes)!!}
+                           
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -115,11 +113,11 @@ View::share('parametro', $totalCitasEnEspera);
                             </td>
                             <td class="text-center">
                                 @if($consulta->miercoles==1)
-                                <a href="#" class="btn btn-success btn-circle btn-sm">
+                                <a href="#" class="btn btn-success btn-circle btn-sm modal_show" data-id="{!!formatearHoras($consulta->rango_miercoles)!!}">
                                     <i class="fas fa-check"></i>
                                 </a>
                                 <hr>
-                                {!!formatearHoras($consulta->rango_miercoles)!!}
+                           
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -128,11 +126,11 @@ View::share('parametro', $totalCitasEnEspera);
                             </td>
                             <td class="text-center">
                                 @if($consulta->jueves==1)
-                                <a href="#" class="btn btn-success btn-circle btn-sm">
+                                <a href="#" class="btn btn-success btn-circle btn-sm modal_show" data-id="{!!formatearHoras($consulta->rango_jueves)!!}">
                                     <i class="fas fa-check"></i>
                                 </a>
-                                <hr>
-                                {!!formatearHoras($consulta->rango_jueves)!!}
+                                
+                     
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -141,11 +139,11 @@ View::share('parametro', $totalCitasEnEspera);
                             </td>
                             <td class="text-center">
                                 @if($consulta->viernes==1)
-                                <a href="#" class="btn btn-success btn-circle btn-sm">
+                                <a href="#" class="btn btn-success btn-circle btn-sm modal_show" data-id="{!!formatearHoras($consulta->rango_viernes)!!}">
                                     <i class="fas fa-check"></i>
                                 </a>
                                 <hr>
-                                {!!formatearHoras($consulta->rango_viernes)!!}
+                          
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -154,11 +152,11 @@ View::share('parametro', $totalCitasEnEspera);
                             </td>
                             <td class="text-center">
                                 @if($consulta->sabado==1)
-                                <a href="#" class="btn btn-success btn-circle btn-sm">
+                                <a href="#" class="btn btn-success btn-circle btn-sm modal_show" data-id="{!!formatearHoras($consulta->rango_sabado)!!}">
                                     <i class="fas fa-check"></i>
                                 </a>
                                 <hr>
-                                {!!formatearHoras($consulta->rango_sabado)!!}
+                                
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -167,11 +165,11 @@ View::share('parametro', $totalCitasEnEspera);
                             </td>
                             <td class="text-center">
                                 @if($consulta->domingo==1)
-                                <a href="#" class="btn btn-success btn-circle btn-sm">
+                                <a href="#" class="btn btn-success btn-circle btn-sm modal_show" data-id="{!!formatearHoras($consulta->rango_domingo)!!}">
                                     <i class="fas fa-check"></i>
                                 </a>
                                 <hr>
-                                {!!formatearHoras($consulta->rango_domingo)!!}
+                               
                                 @else
                                 <a href="#" class="btn btn-info btn-circle btn-sm">
                                     <i class="fas fa-info-circle"></i>
@@ -326,9 +324,32 @@ View::share('parametro', $totalCitasEnEspera);
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
+    
     // Mostrar u ocultar campos "Desde" y "Hasta" según el estado del checkbox
     $(document).ready(function () {
+
+        
+        function modal_data(id){
+            swal({
+            title: "Horario de atención",
+            text:id,
+            icon: "success",
+            content: {
+                element: "span",
+                attributes: {
+                    style: "font-style: italic;"
+                },
+                text: "Una vez agendada su cita, se le notificará vía telefónica o por mensaje de texto"
+            }
+        })
+        }
+
+        $('.modal_show').click(function(){
+            var id = $(this).data('id');
+            modal_data(id)
+        });
         $('.dias').change(function () {
             var id = this.id;
             var ultimoDigito = id.charAt(id.length - 1);

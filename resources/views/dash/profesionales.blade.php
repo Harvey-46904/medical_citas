@@ -22,7 +22,7 @@ View::share('parametro', $totalCitasEnEspera);
             @endif
             <div class="row justify-content-between">
                 <div class="col-md-3 align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">Lista de profesionales </h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Lista de profesional </h6>
                 </div>
                 <div class="col-md-3"> <a href="#" class="btn btn-success btn-icon-split" data-toggle="modal"
                         data-target="#exampleModal">
@@ -90,7 +90,7 @@ View::share('parametro', $totalCitasEnEspera);
         <div class="modal-content">
             <div class="modal-header">
 
-                <h5 class="modal-title" id="exampleModalLabel">Nuevo Servicio</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Nuevo profesional</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -100,7 +100,7 @@ View::share('parametro', $totalCitasEnEspera);
                     @csrf
                     <div class="form-group">
                         <label for="exampleInputEmail1">No documento</label>
-                        <input type="text" class="form-control" name="documento" placeholder="">
+                        <input type="number" class="form-control" name="documento" placeholder="">
 
                     </div>
                     <div class="form-group">

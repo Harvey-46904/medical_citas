@@ -67,3 +67,4 @@ Route::get('deletecita/{id}',"CitasController@destroy")->name("citausuario.elimi
 
 Route::get('editarprofesional/{id}',"ProfesionalesController@edit")->name("profesional.editar");
 Route::post('profesionalactualizar/{id}',"ProfesionalesController@update")->name("profesional.actualizar");
+Route::get('horas_disponibles/{id_servicio}/{fecha_consulta}', "CitasController@horas_disponibles")->name("cita.hora_disponible");
