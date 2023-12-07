@@ -51,7 +51,7 @@ class ProfesionalesController extends Controller
     // Cédula no existe, procede a crear y guardar al profesional
     $crear_profesional = new profesionales;
     $crear_profesional->documento_profesional = $request->documento;
-    $crear_profesional->nombre_profesional = $request->nombre;
+    $crear_profesional->nombre_profesinal = $request->nombre;
     $crear_profesional->save();
 
     return redirect('/profesionales')->with('success', 'Profesional guardado correctamente');
