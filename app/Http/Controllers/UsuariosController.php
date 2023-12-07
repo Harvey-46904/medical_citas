@@ -6,6 +6,7 @@ use App\Models\usuarios;
 use Illuminate\Http\Request;
 use DB;
 use App\Http\Controllers\CitasController;
+use Carbon\Carbon;
 class UsuariosController extends Controller
 {
     /**
@@ -22,16 +23,25 @@ class UsuariosController extends Controller
         return response(["data"=>$pacientes]);
     }
     public function buscarDocumento($documento){
-        $paciente=DB::table("usuarios")->select("nombre_completo","id")->where("cedula","=",$documento)->first();
-
-       
+        $paciente=DB::table("usuarios")->select("nombre_completo","id","usuarios.cedula")->where("cedula","=",$documento)->first();
         $citas=DB::table("citas")
         ->join("usuarios","citas.usuario_id","=","usuarios.id")
         ->join("servicios","citas.servicio_id","=","servicios.id")
         ->where("usuarios.cedula","=",$documento)
         ->select("citas.id","usuarios.cedula","servicios.nombre_servicio","usuarios.nombre_completo","citas.fecha_cita","citas.estado")
         ->get();
-        return response(["data"=>$paciente,"cita"=>$citas]);
+
+        //limite de citas mensauales dos 
+        $mesActual = Carbon::now()->month;
+        // Realizar la consulta para contar las citas en el mes actual
+        $numeroCitas = DB::table("citas")
+        ->join("usuarios","usuarios.id","=","citas.usuario_id")
+        ->where("usuarios.cedula","=",$documento)
+        ->whereMonth('fecha_cita', $mesActual)->count();
+       
+
+
+        return response(["data"=>$paciente,"cita"=>$citas,"informacion"=>$numeroCitas]);
     }
     /**
      * Show the form for creating a new resource.

@@ -207,18 +207,19 @@ class CitasController extends Controller
         return $citas;
     }
     public function horas_disponibles($id_servicio,$fecha_consulta){
+        //return response(["data"=>$id_servicio,"fecha"=>$fecha_consulta]);   
         $fechaParametro = $fecha_consulta;
 
         // Consulta para obtener los registros de la fecha proporcionada
         $registros = DB::table('citas')
-            //->where("servicio_id","=",$id_servicio)
+            ->where("servicio_id","=",$id_servicio)
             ->whereDate('fecha_cita', $fechaParametro)
             ->get();
-            return response(["data"=>$registros]);
+           
         // Obtener solo la hora de los registros
         $horas = $registros->map(function ($registro) {
-            return Carbon::parse($registro->fecha_cita)->format('H:i');
+            return Carbon::parse($registro->fecha_cita)->format('H:i A');
         });
-        
+        return response(["data"=>$horas]);   
     }
 }
