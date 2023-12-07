@@ -59,7 +59,7 @@
                             <div class="col-lg-6  d-flex align-items-center justify-content-center ">
 
                                 <img src="https://citasmedicas.techmhm.com/dash/img/logo.png" alt="..." width="80%"
-                                    class="img-thumbnail">
+                                    class="">
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
