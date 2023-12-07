@@ -20,6 +20,11 @@ View::share('parametro', $totalCitasEnEspera);
                 {{ session('success') }}
             </div>
             @endif
+            @if(session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+            @endif
             <div class="row justify-content-between">
                 <div class="col-md-3 align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Lista de profesionales </h6>

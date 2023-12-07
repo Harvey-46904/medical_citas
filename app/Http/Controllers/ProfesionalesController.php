@@ -40,12 +40,21 @@ class ProfesionalesController extends Controller
      */
     public function store(Request $request)
     {
-        $crear_profesional=new profesionales;
-        $crear_profesional->documento_profesional=$request->documento;
-        $crear_profesional->nombre_profesinal=$request->nombre;
-        $crear_profesional->save();
-        
-        return redirect('/profesionales')->with('success', 'Profesional guardado correctamente');
+        // Verificar si la cédula ya existe
+    $cedulaExistente = profesionales::where('documento_profesional', $request->documento)->exists();
+
+    if ($cedulaExistente) {
+        // Cédula ya existe, retorna un error o realiza alguna acción que consideres adecuada
+        return redirect('/profesionales')->with('error', 'El profesional con el numero de cédula '.$request->documento.' ya existe');
+    }
+
+    // Cédula no existe, procede a crear y guardar al profesional
+    $crear_profesional = new profesionales;
+    $crear_profesional->documento_profesional = $request->documento;
+    $crear_profesional->nombre_profesional = $request->nombre;
+    $crear_profesional->save();
+
+    return redirect('/profesionales')->with('success', 'Profesional guardado correctamente');
     }
 
     /**
