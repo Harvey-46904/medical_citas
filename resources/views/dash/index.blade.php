@@ -107,9 +107,12 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                    
+                   
+                        <a class="collapse-item" href="{{route('ccitadash')}}">Crear Nueva CITA</a>
+                        <a class="collapse-item" href="{{route('citas.espera')}}">Citas en Espera</a>
                         <a class="collapse-item" href="{{route('citas.index')}}">Citas Aprobadas</a>
                         <a class="collapse-item" href="{{route('citas.rechazadas')}}">Citas Rechazadas</a>
+                        <a class="collapse-item" href="{{route('citas.canceladas')}}">Citas Canceladas</a>
                         
                     </div>
                 </div>
@@ -305,12 +308,6 @@
     <!-- Custom scripts for all pages-->
     <script src="{!! asset('dash/js/sb-admin-2.min.js') !!}"></script>
 
-    <!-- Page level plugins -->
-    <script src="{!! asset('dash/vendor/chart.js/Chart.min.js') !!}"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="{!! asset('dash/js/demo/chart-area-demo.js') !!}"></script>
-    <script src="{!! asset('dash/js/demo/chart-pie-demo.js') !!}"></script>
 
 </body>
 

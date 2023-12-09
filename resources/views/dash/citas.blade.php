@@ -165,7 +165,7 @@
                                                 <th class="text-center">Servicio</th>
                                                 <th class="text-center">Fecha</th>
                                                 <th class="text-center">Estado</th>
-                                                <th class="text-center">Eliminar</th>
+                                                <th class="text-center">Acción</th>
                                             </tr>
                                         </thead>
 
@@ -320,21 +320,41 @@
                     celdaFecha.textContent = datos[i].fecha_cita;
                     celdaestado.textContent = datos[i].estado;
                     //celdaeliminar.textContent = datos[i].id;
+                    var fechaActual = new Date();
 
-                    var botonEliminar = document.createElement('button');
-                    botonEliminar.textContent = 'Cancelar';
-                    botonEliminar.setAttribute('data-id', datos[i].id); // Asigna el ID del dato al botón
-                    botonEliminar.classList.add('btn');
-                    botonEliminar.classList.add('btn-danger');
-                    // Agrega el evento onclick al botón llamando a la función handleEliminarClick
-                    botonEliminar.onclick = function () {
-                        var id = this.getAttribute('data-id');
+                    // Formatear la fecha y la hora
+                    var fechaFormateada = fechaActual.toISOString().split('T')[0];
+                    var horaFormateada = fechaActual.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-                        handleEliminarClick(id);
-                    };
+                    var ffecha = new Date(fechaFormateada);
+                    var fechaEstado = new Date(datos[i].fecha_cita);
 
-                    // Asigna el botón a la celda
-                    celdaeliminar.appendChild(botonEliminar);
+                    
+
+                    if(datos[i].estado=="En espera" || datos[i].estado=="Aprobada"){
+                            // Comparar las fechas
+                        if (ffecha > fechaEstado) {
+                            console.log('La fecha actual es posterior a la fecha de estado.');
+                        } else {
+                           
+                        var botonEliminar = document.createElement('button');
+                        botonEliminar.textContent = 'Cancelar';
+                        botonEliminar.setAttribute('data-id', datos[i].id); // Asigna el ID del dato al botón
+                        botonEliminar.classList.add('btn');
+                        botonEliminar.classList.add('btn-danger');
+                        // Agrega el evento onclick al botón llamando a la función handleEliminarClick
+                        botonEliminar.onclick = function () {
+                            var id = this.getAttribute('data-id');
+
+                            handleEliminarClick(id);
+                        };
+                        // Asigna el botón a la celda
+                        celdaeliminar.appendChild(botonEliminar);
+                        }
+
+
+                    }
+                   
 
                 }
             }
@@ -638,12 +658,13 @@
 
                     var miArray = excluidas;
                     var miVariable = horaFormateada;
-
+                       
                     if (miArray.includes(miVariable.toString())) {
 
                     } else {
                         // Crear una opción y agregarla al select
                         var opcion = document.createElement("option");
+                        console.log(horaFormateada);
                         opcion.value = horaFormateada;
                         opcion.text = horaFormateada;
                         selectHoras.add(opcion);

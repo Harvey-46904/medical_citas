@@ -37,7 +37,9 @@ class UsuariosController extends Controller
         $numeroCitas = DB::table("citas")
         ->join("usuarios","usuarios.id","=","citas.usuario_id")
         ->where("usuarios.cedula","=",$documento)
-        ->whereMonth('fecha_cita', $mesActual)->count();
+        ->whereMonth('fecha_cita', $mesActual)
+        ->where("citas.estado","=","Aprobada")
+        ->count();
        
 
 

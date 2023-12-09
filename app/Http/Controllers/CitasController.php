@@ -35,6 +35,27 @@ class CitasController extends Controller
         $totalCitasEnEspera=self::notificacion_cita();
         return view('dash.lista_rechazadas',compact("citas","totalCitasEnEspera"));
     }
+    public function citas_canceladas(){
+        $citas = DB::table("citas")->where('estado', 'Cancelada')
+        ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
+        ->join('servicios','citas.servicio_id','=',"servicios.id")
+        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
+        ->get();
+        $totalCitasEnEspera=self::notificacion_cita();
+        return view('dash.lista_canceladas',compact("citas","totalCitasEnEspera"));
+    }
+    public function citas_espera(){
+        $citas = DB::table("citas")->where('estado', 'En Espera')
+        ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
+        ->join('servicios','citas.servicio_id','=',"servicios.id")
+        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
+        ->get();
+        $totalCitasEnEspera=self::notificacion_cita();
+        return view('dash.lista_espera',compact("citas","totalCitasEnEspera"));
+    }
+    
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -133,10 +154,15 @@ class CitasController extends Controller
      */
     public function destroy($id)
     {
-        $cita_eliminiada=DB::table("citas")
-        ->where("citas.id","=",$id)
-        ->delete();
-        return response(["data"=>"cita eliminada"]);
+       
+
+        $cita = citas::find($id);
+        if ($cita) {
+            // Actualiza los campos según tus necesidades
+            $cita->estado="Cancelada";
+            $cita->save();
+            return response(["data"=>"cita eliminada"]);
+        }
     }
 
     public function crear_cita(){
@@ -148,6 +174,20 @@ class CitasController extends Controller
         ->get();
        
         return view('dash.citas',compact("citas"));
+    }
+
+    public function crear_cita_dash(){
+        $citas=DB::table("servicios")
+        ->join('servicios_disponibilidads', 'servicios.id', '=', 'servicios_disponibilidads.servicio_id')
+        ->join('profesionales', 'profesionales.id', '=', 'servicios_disponibilidads.profesional_id')
+        ->select("servicios.id AS id_servi","servicios.nombre_servicio","servicios_disponibilidads.*","profesionales.nombre_profesinal")
+        ->where("servicios_disponibilidads.visibilidad","=",TRUE)
+        ->get();
+        $parametro=self::notificacion_cita();
+        return view('dash.index_vital',compact("citas","parametro"));
+
+
+
     }
 
     public function citas_pendientes($id){
@@ -213,12 +253,15 @@ class CitasController extends Controller
         // Consulta para obtener los registros de la fecha proporcionada
         $registros = DB::table('citas')
             ->where("servicio_id","=",$id_servicio)
+           
             ->whereDate('fecha_cita', $fechaParametro)
+            ->where("estado","=","Aprobada")
+            ->orWhere("estado","=","En Espera")
             ->get();
            
         // Obtener solo la hora de los registros
         $horas = $registros->map(function ($registro) {
-            return Carbon::parse($registro->fecha_cita)->format('H:i A');
+            return Carbon::parse($registro->fecha_cita)->format('h:i A');
         });
         return response(["data"=>$horas]);   
     }

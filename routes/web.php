@@ -35,6 +35,9 @@ Route::resource('citas', 'CitasController',['except'=>['create','edit']])->names
 Route::get('citas-pendientes/{id}', 'CitasController@citas_pendientes')->name('citas.pendientes');
 Route::get('citas-change-estado/{id}/{valor}', 'CitasController@cambio_estado')->name('cita.update');
 Route::get('citas-rechazadas', 'CitasController@citas_rechazadas')->name('citas.rechazadas');
+Route::get('citas-espera', 'CitasController@citas_espera')->name('citas.espera');
+
+Route::get('citas-canceladas', 'CitasController@citas_canceladas')->name('citas.canceladas');
 Route::get('prueba_total', 'CitasController@limite_citas');
 
 Route::get('usuarios/{documento}', 'UsuariosController@buscarDocumento')->name('buscar.documento');
@@ -64,7 +67,7 @@ Route::post('cambio/{id}',"UserController@update")->name("users.actualizar");
 Route::get('deleteprofesional/{id}',"ProfesionalesController@destroy")->name("profesional.eliminar");
 Route::get('deletecita/{id}',"CitasController@destroy")->name("citausuario.eliminar");
 
-
+Route::get('citadash',"CitasController@crear_cita_dash")->name("ccitadash");
 Route::get('editarprofesional/{id}',"ProfesionalesController@edit")->name("profesional.editar");
 Route::post('profesionalactualizar/{id}',"ProfesionalesController@update")->name("profesional.actualizar");
 Route::get('horas_disponibles/{id_servicio}/{fecha_consulta}', "CitasController@horas_disponibles")->name("cita.hora_disponible");
