@@ -644,7 +644,7 @@
                             user_id = data.data.id;
                             var limite=data.informacion
                             if(limite>=2){
-                                $("#calendario").show();
+                               
                                 $("#mensaje_limite").show();
                             }
 

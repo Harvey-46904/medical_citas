@@ -92,7 +92,7 @@
                             <ul id="jornadalunes" >
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn" type="checkbox" id="">
+                                        <input class="form-check-input dn" type="checkbox" id="" {{ $lunes_formatera['J Diurna']["inicio"] !="" ? 'checked' : ''}}>
                                         <label class="form-check-label" for="">
                                             Mañana
                                         </label>
@@ -111,7 +111,7 @@
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn " type="checkbox" id="">
+                                        <input class="form-check-input dn " type="checkbox" id="" {{ $lunes_formatera['J Tarde']["inicio"] !="" ? 'checked' : ''}}>
                                         <label class="form-check-label" for="">
                                             Tarde
                                         </label>
@@ -146,7 +146,7 @@
                             <ul id="jornadalunes" >
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn" type="checkbox" id="">
+                                        <input class="form-check-input dn" type="checkbox" id="" {{ $martes_formatera['J Diurna']["inicio"] !="" ? 'checked' : ''}}>
                                         <label class="form-check-label" for="">
                                             Mañana
                                         </label>
@@ -165,7 +165,7 @@
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn " type="checkbox" id="">
+                                        <input class="form-check-input dn " type="checkbox" id="" {{ $martes_formatera['J Tarde']["inicio"] !="" ? 'checked' : ''}}>
                                         <label class="form-check-label" for="">
                                             Tarde
                                         </label>
@@ -200,7 +200,7 @@
                             <ul id="jornadalunes" >
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn" type="checkbox" id="">
+                                        <input class="form-check-input dn" type="checkbox" id="" {{ $miercoles_formatera['J Diurna']["inicio"] !="" ? 'checked' : ''}}>
                                         <label class="form-check-label" for="">
                                             Mañana
                                         </label>
@@ -219,7 +219,7 @@
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn " type="checkbox" id="">
+                                        <input class="form-check-input dn " type="checkbox" id="" {{ $miercoles_formatera['J Tarde']["inicio"] !="" ? 'checked' : ''}}>
                                         <label class="form-check-label" for="">
                                             Tarde
                                         </label>
@@ -254,7 +254,7 @@
                             <ul id="jornadalunes" >
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn" type="checkbox" id="">
+                                        <input class="form-check-input dn" type="checkbox" id="" {{ $jueves_formatera['J Diurna']["inicio"] !="" ? 'checked' : ''}}>
                                         <label class="form-check-label" for="">
                                             Mañana
                                         </label>
@@ -273,7 +273,7 @@
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn " type="checkbox" id="">
+                                        <input class="form-check-input dn " type="checkbox" id="" {{ $jueves_formatera['J Tarde']["inicio"] !="" ? 'checked' : ''}}>
                                         <label class="form-check-label" for="">
                                             Tarde
                                         </label>
@@ -308,7 +308,7 @@
                             <ul id="jornadalunes" >
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn" type="checkbox" id="">
+                                        <input class="form-check-input dn" type="checkbox" id="" {{ $viernes_formatera['J Diurna']["inicio"] !="" ? 'checked' : ''}}>
                                         <label class="form-check-label" for="">
                                             Mañana
                                         </label>
@@ -327,7 +327,7 @@
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn " type="checkbox" id="">
+                                        <input class="form-check-input dn " type="checkbox" id="" {{ $viernes_formatera["J Tarde"]["inicio"] !="" ? 'checked' : ''}}>
                                         <label class="form-check-label" for="">
                                             Tarde
                                         </label>
@@ -362,7 +362,7 @@
                             <ul id="jornadalunes" >
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn" type="checkbox" id="">
+                                        <input class="form-check-input dn" type="checkbox" id="" {{ $sabado_formatera["J Diurna"]["inicio"] !="" ? 'checked' : ''}} >
                                         <label class="form-check-label" for="">
                                             Mañana
                                         </label>
@@ -381,7 +381,7 @@
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn " type="checkbox" id="">
+                                        <input class="form-check-input dn " type="checkbox" id="" {{ $sabado_formatera["J Tarde"]["inicio"] !="" ? 'checked' : ''}} >
                                         <label class="form-check-label" for="">
                                             Tarde
                                         </label>
@@ -436,7 +436,7 @@
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn " type="checkbox" id="">
+                                        <input class="form-check-input dn " type="checkbox" id=""   >
                                         <label class="form-check-label" for="">
                                             Tarde
                                         </label>
