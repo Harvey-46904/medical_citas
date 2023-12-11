@@ -201,17 +201,31 @@
                                     
                                 </h6>
                                 @for ($i = 0; $i <  $parametro->total_citas_espera ; $i++)
-                                <a class="dropdown-item d-flex align-items-center" href="{{route('citas.pendientes', ['id' => $parametro[$i]->id])}}">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                        <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">{{$parametro[$i]->fecha_cita}}</div>
-                                        {{$parametro[$i]->nombre_completo}} - {{$parametro[$i]->nombre_servicio}}
-                                    </div>
-                                </a>
+                                    @if($parametro[$i]->estado=="En espera")
+                                        <a class="dropdown-item d-flex align-items-center" href="{{route('citas.pendientes', ['id' => $parametro[$i]->id])}}">
+                                            <div class="mr-3">
+                                                <div class="icon-circle bg-primary">
+                                                <i class="fas fa-file-alt text-white"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="small text-gray-500">{{$parametro[$i]->fecha_cita}}->{{$parametro[$i]->estado}}</div>
+                                                {{$parametro[$i]->nombre_completo}} - {{$parametro[$i]->nombre_servicio}}
+                                            </div>
+                                        </a>
+                                    @else
+                                        <a class="dropdown-item d-flex align-items-center" href="{{route('citas.acancelar', ['id' => $parametro[$i]->id])}}">
+                                            <div class="mr-3">
+                                                <div class="icon-circle bg-danger">
+                                                <i class="fas fa-file-alt text-white"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="small text-gray-500">{{$parametro[$i]->fecha_cita}}-> {{$parametro[$i]->estado}}</div>
+                                                {{$parametro[$i]->nombre_completo}} - {{$parametro[$i]->nombre_servicio}}
+                                            </div>
+                                        </a>
+                                    @endif
                                 @endfor
 
                                 

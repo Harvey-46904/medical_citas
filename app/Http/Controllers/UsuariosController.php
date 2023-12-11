@@ -23,16 +23,18 @@ class UsuariosController extends Controller
         return response(["data"=>$pacientes]);
     }
     public function buscarDocumento($documento){
+        $mesActual = Carbon::now()->month;
         $paciente=DB::table("usuarios")->select("nombre_completo","id","usuarios.cedula")->where("cedula","=",$documento)->first();
         $citas=DB::table("citas")
         ->join("usuarios","citas.usuario_id","=","usuarios.id")
         ->join("servicios","citas.servicio_id","=","servicios.id")
         ->where("usuarios.cedula","=",$documento)
+        ->whereMonth('citas.fecha_cita', $mesActual)
         ->select("citas.id","usuarios.cedula","servicios.nombre_servicio","usuarios.nombre_completo","citas.fecha_cita","citas.estado")
         ->get();
 
         //limite de citas mensauales dos 
-        $mesActual = Carbon::now()->month;
+       
         // Realizar la consulta para contar las citas en el mes actual
         $numeroCitas = DB::table("citas")
         ->join("usuarios","usuarios.id","=","citas.usuario_id")

@@ -36,7 +36,7 @@ class CitasController extends Controller
         return view('dash.lista_rechazadas',compact("citas","totalCitasEnEspera"));
     }
     public function citas_canceladas(){
-        $citas = DB::table("citas")->where('estado', 'Cancelada')
+        $citas = DB::table("citas")->where('estado', 'Cita Cancelada')
         ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
         ->join('servicios','citas.servicio_id','=',"servicios.id")
         ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
@@ -197,25 +197,53 @@ class CitasController extends Controller
         ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
         ->where("citas.id","=",$id)
         ->get();
-
-
         $totalCitasEnEspera=self::notificacion_cita();
-        
-        return view('dash.citas_pendientes',compact("citas","totalCitasEnEspera"));
-        
-
-        
+        return view('dash.citas_pendientes',compact("citas","totalCitasEnEspera"));    
     }
+    public function citas_pendientes_cancelar($id){
+        $citas = DB::table("citas")->where('estado', 'Cancelada')
+        ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
+        ->join('servicios','citas.servicio_id','=',"servicios.id")
+        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
+        ->where("citas.id","=",$id)
+        ->get();
+        $totalCitasEnEspera=self::notificacion_cita();
+        return view('dash.citas_acancelar',compact("citas","totalCitasEnEspera"));
+    }
+    
 
     public function cambio_estado($id,$valor){
+        $estado_nuevo="";
+        switch ($valor) {
+            case 1:
+                $estado_nuevo="Aprobada";
+                DB::table('citas')
+                ->where('id', $id)
+                ->update(['estado' => $estado_nuevo]);
+                return redirect('/citas')->with('success', 'cita aprobada correctamente');
+                break;
+            case 0:
+                $estado_nuevo= "Rechazada"  ;
+                DB::table('citas')
+                ->where('id', $id)
+                ->update(['estado' => $estado_nuevo]);
+                return redirect('/citas-rechazadas')->with('success', 'cita rechazada correctamente');
+            break;
+            
+            case 3:
+                $estado_nuevo=  "Cita Cancelada"    ;
+                DB::table('citas')
+                ->where('id', $id)
+                ->update(['estado' => $estado_nuevo]);
+                return redirect('/citas')->with('success', 'cita confirmada en cancelacion  correctamente');
+            break;
+                    
+            default:
+                # code...
+                break;
+        }
        
-
-        $estado_nuevo=$valor==1?"Aprobada":"Rechazada";
-        
-        DB::table('citas')
-        ->where('id', $id)
-        ->update(['estado' => $estado_nuevo]);
-       
+       /*
         if($estado_nuevo=="Aprobada"){
             $datos = ['success' => 'Cita Confirmada'];
             return redirect('/citas')->with('success', 'cita aprobada correctamente');
@@ -227,15 +255,17 @@ class CitasController extends Controller
             // Redireccionar a la página anterior con datos flash
             return back()->with($datos);
         }
-       
+       */
     }
 
 
     public function notificacion_cita(){
-        $citas = DB::table("citas")->where('estado', 'En espera')
+        $citas = DB::table("citas")
+        ->where('estado', 'En espera')
+        ->orWhere('estado','Cancelada' )
         ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
         ->join('servicios','citas.servicio_id','=',"servicios.id")
-        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
+        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio","estado")
         ->get();
 
         $user=DB::table("users")->select("name")->where("id","=",1)->first();

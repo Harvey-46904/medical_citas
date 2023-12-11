@@ -33,6 +33,7 @@ Route::resource('citas', 'CitasController',['except'=>['create','edit']])->names
     'index'=>'citas.index'
 ]);
 Route::get('citas-pendientes/{id}', 'CitasController@citas_pendientes')->name('citas.pendientes');
+Route::get('citas-acancelar/{id}', 'CitasController@citas_pendientes_cancelar')->name('citas.acancelar');
 Route::get('citas-change-estado/{id}/{valor}', 'CitasController@cambio_estado')->name('cita.update');
 Route::get('citas-rechazadas', 'CitasController@citas_rechazadas')->name('citas.rechazadas');
 Route::get('citas-espera', 'CitasController@citas_espera')->name('citas.espera');
