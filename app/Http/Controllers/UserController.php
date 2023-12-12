@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use App\Http\Controllers\CitasController;
+
+use Laravel\Sanctum\HasApiTokens;
+
 class UserController extends Controller
 {
     public function index()
@@ -94,18 +97,22 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
+      
         $credentials = $request->only('email', 'password');
     
         // Intentar autenticar al usuario
         if (Auth::attempt($credentials)) {
             // Autenticación exitosa
+            $user = Auth::user();
+            $token = $user->createToken('TokenDeInicioDeSesion')->plainTextToken;
+
             $logicaCompartida = new CitasController();
             $totalCitasEnEspera =$logicaCompartida->notificacion_cita();
             $nservicios = DB::table("servicios")->count();
             $nusuarios = DB::table("usuarios")->count();
             $ncitas = DB::table("citas")->count();
            
-            return view('dash.inicio',compact("totalCitasEnEspera","nservicios","nusuarios","ncitas"));
+            return view('dash.inicio',compact("totalCitasEnEspera","nservicios","nusuarios","ncitas","token"));
         } else {
             // Autenticación fallida
             return redirect()->back()->with('success', 'Credenciales incorrectas.');

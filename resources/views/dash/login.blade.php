@@ -50,7 +50,7 @@
                                     @endif
                                     <h2 class="h4 text-gray-900 mb-4 display-4">Bienvenido</h2>
                                     </div>
-                                    <form class="user" method="POST" action="{{route('login')}}">
+                                    <form class="user" method="POST" action="{{route('loginfin')}}">
                                         @csrf
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"

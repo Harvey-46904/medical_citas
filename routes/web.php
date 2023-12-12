@@ -13,8 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
+Route::middleware('auth:sanctum')->group(function () {
+   
+   
+    
+});
+Route::get('dashboard',"ServiciosController@datasnuestras")->name("dashboard");
 Route::resource('servicios', 'ServiciosController',['except'=>['create','edit']])->names([
     'index' => 'servicios.index'
 ]);;
@@ -49,7 +53,7 @@ Route::get('registro', function () {
 Route::get('login', function () {
     return view('dash.login');
 })->name('logina');
-Route::get('dashboard',"ServiciosController@datasnuestras")->name("dashboard");
+
 Route::get('deleteservice/{id}',"ServiciosController@destroy")->name("servicio.eliminar");
 Route::get('deleteuser/{id}',"UsuariosController@destroy")->name("usuario.eliminar");
 Route::get('editar-usuario/{id}',"UsuariosController@edit")->name("usuario.editar");
@@ -61,6 +65,7 @@ Route::post('update/{id}',"UsuariosController@update")->name("usuario.actualizar
 Route::post('update_service/{id}',"ServiciosController@update")->name("servicio.actualizar");
 
 Route::post('logins',"UserController@login")->name("login");
+Route::post('loginauth',"UserController@login")->name("loginfin");
 
 Route::get('credenciales',"UserController@edit")->name("users.edit");
 Route::post('cambio/{id}',"UserController@update")->name("users.actualizar");
