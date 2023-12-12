@@ -53,7 +53,9 @@ Route::get('registro', function () {
 Route::get('login', function () {
     return view('dash.login');
 })->name('logina');
-
+Route::get('wel', function () {
+    return view('welcome');
+});
 Route::get('deleteservice/{id}',"ServiciosController@destroy")->name("servicio.eliminar");
 Route::get('deleteuser/{id}',"UsuariosController@destroy")->name("usuario.eliminar");
 Route::get('editar-usuario/{id}',"UsuariosController@edit")->name("usuario.editar");

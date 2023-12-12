@@ -77,8 +77,13 @@ View::share('parametro', $totalCitasEnEspera);
                             $horaIniciotarde = date("g:i A", strtotime($diviciontarde[0]));
                             $horaFintarde = date("g:i A", strtotime($diviciontarde[1]));
                         }
-
-                         return "J Diurna: ". $horaIniciomanana . ' - ' . $horaFinmanana.' J Tarde: '.$horaIniciotarde . ' - ' . $horaFintarde ;
+                        if($horaIniciomanana ==""){
+                            return "J Diurna: "."No aplica".' J Tarde: '.$horaIniciotarde . ' - ' . $horaFintarde ;
+                        }
+                        if($horaIniciotarde ==""){
+                            return "J Diurna: ". $horaIniciomanana . ' - ' . $horaFinmanana.' J Tarde: '."No aplica" ;
+                        }
+                        return "J Diurna: ". $horaIniciomanana . ' - ' . $horaFinmanana.' J Tarde: '.$horaIniciotarde . ' - ' . $horaFintarde ;
                         }
                         @endphp
                         @foreach($consultas as $consulta)
