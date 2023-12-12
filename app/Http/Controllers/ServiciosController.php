@@ -63,19 +63,19 @@ class ServiciosController extends Controller
            'servicio_id'=>$new_servicio->id,
            'profesional_id'=>$request->profesional,
            'lunes'=>$request->Lunes=="on"?1:0,
-           'rango_lunes'=>$request->Lunes=="on"?$request->mananafinaldesde0."&".$request->mananafinalhasta0."A".$request->tardefinaldesde0."&".$request->tardefinalhasta0:"&A&",
+           'rango_lunes'=>self::validar_horarios($request->Lunes,$request->m0,$request->t0,$request->mananafinaldesde0,$request->mananafinalhasta0,$request->tardefinaldesde0,$request->tardefinalhasta0),
            'martes'=>$request->Martes=="on"?1:0,
-           'rango_martes'=>$request->Martes=="on"?$request->mananafinaldesde1."&".$request->mananafinalhasta1."A".$request->tardefinaldesde1."&".$request->tardefinalhasta1:"&A&",
+           'rango_martes'=>self::validar_horarios($request->Martes,$request->m1,$request->t1,$request->mananafinaldesde1,$request->mananafinalhasta1,$request->tardefinaldesde1,$request->tardefinalhasta1),
            'miercoles'=>$request->Miercoles=="on"?1:0,
-           'rango_miercoles'=>$request->Miercoles=="on"?$request->mananafinaldesde2."&".$request->mananafinalhasta2."A".$request->tardefinaldesde2."&".$request->tardefinalhasta2:"&A&",
+           'rango_miercoles'=>self::validar_horarios($request->Miercoles,$request->m2,$request->t2,$request->mananafinaldesde2,$request->mananafinalhasta2,$request->tardefinaldesde2,$request->tardefinalhasta2),
            'jueves'=>$request->Jueves=="on"?1:0,
-           'rango_jueves'=>$request->Jueves=="on"?$request->mananafinaldesde3."&".$request->mananafinalhasta3."A".$request->tardefinaldesde3."&".$request->tardefinalhasta3:"&A&",
+           'rango_jueves'=>self::validar_horarios($request->Jueves,$request->m3,$request->t3,$request->mananafinaldesde3,$request->mananafinalhasta3,$request->tardefinaldesde3,$request->tardefinalhasta3),
            'viernes'=>$request->Viernes=="on"?1:0,
-           'rango_viernes'=>$request->Viernes=="on"?$request->mananafinaldesde4."&".$request->mananafinalhasta4."A".$request->tardefinaldesde4."&".$request->tardefinalhasta4:"&A&",
+           'rango_viernes'=>self::validar_horarios($request->Viernes,$request->m4,$request->t4,$request->mananafinaldesde4,$request->mananafinalhasta4,$request->tardefinaldesde4,$request->tardefinalhasta4),
            'sabado'=>$request->Sabado=="on"?1:0,
-           'rango_sabado'=>$request->Sabado=="on"?$request->mananafinaldesde5."&".$request->mananafinalhasta5."A".$request->tardefinaldesde5."&".$request->tardefinalhasta5:"&A&",
+           'rango_sabado'=>self::validar_horarios($request->Sabado,$request->m5,$request->t5,$request->mananafinaldesde5,$request->mananafinalhasta5,$request->tardefinaldesde5,$request->tardefinalhasta5),
            'domingo'=>$request->Domingo=="on"?1:0,
-           'rango_domingo'=>$request->Domingo=="on"?$request->mananafinaldesde6."&".$request->mananafinalhasta6."A".$request->tardefinaldesde6."&".$request->tardefinalhasta6:"&A&",
+           'rango_domingo'=>self::validar_horarios($request->Domingo,$request->m6,$request->t6,$request->mananafinaldesde6,$request->mananafinalhasta6,$request->tardefinaldesde6,$request->tardefinalhasta6),
            'limite_servico'=>$request->limite,
            'rango_minutos'=>$request->rango,
            'visibilidad'=>TRUE,
@@ -84,6 +84,25 @@ class ServiciosController extends Controller
 
         return redirect('/servicios')->with('success', 'Servicio guardado correctamente');
         return response(["data"=>$request->all()]);
+    }
+
+    public function validar_horarios($dia,$jornadam,$jornadat,$manana_inicio,$manana_fin,$tarde_inicio,$tarde_fin){
+        $cadena="";
+        if($dia=="on"){
+            if($jornadam=="on" && $jornadat=="on"){
+                $cadena=$manana_inicio."&".$manana_fin."A".$tarde_inicio."&".$tarde_fin;
+            }else {
+               if($jornadam=="on"){
+                $cadena= $manana_inicio."&".$manana_fin."A"."&";
+               }if($jornadat=="on"){
+                $cadena="&"."A".$tarde_inicio."&".$tarde_fin;
+               }
+            }
+
+        }else{
+            $cadena= "&A&";
+        }
+        return $cadena;
     }
 
     /**
@@ -130,19 +149,19 @@ class ServiciosController extends Controller
         ->where('servicio_id', $id)
         ->update([
             'lunes'=>$request->Lunes=="on"?1:0,
-            'rango_lunes'=>$request->Lunes=="on"?$request->mananafinaldesde0."&".$request->mananafinalhasta0."A".$request->tardefinaldesde0."&".$request->tardefinalhasta0:"&A&",
-            'martes'=>$request->Martes=="on"?1:0,
-            'rango_martes'=>$request->Martes=="on"?$request->mananafinaldesde1."&".$request->mananafinalhasta1."A".$request->tardefinaldesde1."&".$request->tardefinalhasta1:"&A&",
-            'miercoles'=>$request->Miercoles=="on"?1:0,
-            'rango_miercoles'=>$request->Miercoles=="on"?$request->mananafinaldesde2."&".$request->mananafinalhasta2."A".$request->tardefinaldesde2."&".$request->tardefinalhasta2:"&A&",
-            'jueves'=>$request->Jueves=="on"?1:0,
-            'rango_jueves'=>$request->Jueves=="on"?$request->mananafinaldesde3."&".$request->mananafinalhasta3."A".$request->tardefinaldesde3."&".$request->tardefinalhasta3:"&A&",
-            'viernes'=>$request->Viernes=="on"?1:0,
-            'rango_viernes'=>$request->Viernes=="on"?$request->mananafinaldesde4."&".$request->mananafinalhasta4."A".$request->tardefinaldesde4."&".$request->tardefinalhasta4:"&A&",
-            'sabado'=>$request->Sabado=="on"?1:0,
-            'rango_sabado'=>$request->Sabado=="on"?$request->mananafinaldesde5."&".$request->mananafinalhasta5."A".$request->tardefinaldesde5."&".$request->tardefinalhasta5:"&A&",
-            'domingo'=>$request->Domingo=="on"?1:0,
-            'rango_domingo'=>$request->Domingo=="on"?$request->mananafinaldesde6."&".$request->mananafinalhasta6."A".$request->tardefinaldesde6."&".$request->tardefinalhasta6:"&A&",
+            'rango_lunes'=>self::validar_horarios($request->Lunes,$request->m0,$request->t0,$request->mananafinaldesde0,$request->mananafinalhasta0,$request->tardefinaldesde0,$request->tardefinalhasta0),
+           'martes'=>$request->Martes=="on"?1:0,
+           'rango_martes'=>self::validar_horarios($request->Martes,$request->m1,$request->t1,$request->mananafinaldesde1,$request->mananafinalhasta1,$request->tardefinaldesde1,$request->tardefinalhasta1),
+           'miercoles'=>$request->Miercoles=="on"?1:0,
+           'rango_miercoles'=>self::validar_horarios($request->Miercoles,$request->m2,$request->t2,$request->mananafinaldesde2,$request->mananafinalhasta2,$request->tardefinaldesde2,$request->tardefinalhasta2),
+           'jueves'=>$request->Jueves=="on"?1:0,
+           'rango_jueves'=>self::validar_horarios($request->Jueves,$request->m3,$request->t3,$request->mananafinaldesde3,$request->mananafinalhasta3,$request->tardefinaldesde3,$request->tardefinalhasta3),
+           'viernes'=>$request->Viernes=="on"?1:0,
+           'rango_viernes'=>self::validar_horarios($request->Viernes,$request->m4,$request->t4,$request->mananafinaldesde4,$request->mananafinalhasta4,$request->tardefinaldesde4,$request->tardefinalhasta4),
+           'sabado'=>$request->Sabado=="on"?1:0,
+           'rango_sabado'=>self::validar_horarios($request->Sabado,$request->m5,$request->t5,$request->mananafinaldesde5,$request->mananafinalhasta5,$request->tardefinaldesde5,$request->tardefinalhasta5),
+           'domingo'=>$request->Domingo=="on"?1:0,
+           'rango_domingo'=>self::validar_horarios($request->Domingo,$request->m6,$request->t6,$request->mananafinaldesde6,$request->mananafinalhasta6,$request->tardefinaldesde6,$request->tardefinalhasta6),
             'limite_servico'=>$request->limite,
             'rango_minutos'=>$request->rango,
         ]);

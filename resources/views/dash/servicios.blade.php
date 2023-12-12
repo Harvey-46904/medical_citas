@@ -269,7 +269,7 @@ View::share('parametro', $totalCitasEnEspera);
                             <ul id="jornada{{$i}}" style="display: none;">
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn" type="checkbox" id="m{{$i}}">
+                                        <input class="form-check-input dn" type="checkbox" id="m{{$i}}" name="m{{$i}}">
                                         <label class="form-check-label" for="defaultCheck{{$i}}">
                                             Mañana
                                         </label>
@@ -288,7 +288,7 @@ View::share('parametro', $totalCitasEnEspera);
                                 </li>
                                 <li>
                                     <div class="form-check">
-                                        <input class="form-check-input dn " type="checkbox" id="t{{$i}}">
+                                        <input class="form-check-input dn " type="checkbox" id="t{{$i}}" name="t{{$i}}">
                                         <label class="form-check-label" for="defaultCheck{{$i}}">
                                             Tarde
                                         </label>
