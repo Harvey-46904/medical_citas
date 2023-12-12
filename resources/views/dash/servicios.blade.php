@@ -78,7 +78,7 @@ View::share('parametro', $totalCitasEnEspera);
                             $horaFintarde = date("g:i A", strtotime($diviciontarde[1]));
                         }
 
-                         return "J Diurna: ". $horaIniciomanana . ' - ' . $horaFinmanana.'  -  J Tarde: '.$horaIniciotarde . ' - ' . $horaFintarde ;
+                         return "J Diurna: ". $horaIniciomanana . ' - ' . $horaFinmanana.' J Tarde: '.$horaIniciotarde . ' - ' . $horaFintarde ;
                         }
                         @endphp
                         @foreach($consultas as $consulta)
@@ -348,7 +348,8 @@ View::share('parametro', $totalCitasEnEspera);
 
         $('.modal_show').click(function(){
             var id = $(this).data('id');
-            modal_data(id)
+            var nuevoString = id.replace(/\bJ Diurna\b/g, 'Mañana').replace(/\bJ Tarde\b/g, '\nTarde');
+            modal_data(nuevoString)
         });
         $('.dias').change(function () {
             var id = this.id;

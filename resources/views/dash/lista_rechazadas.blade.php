@@ -53,9 +53,12 @@
                             <td>{{$cita->nombre_servicio}}</td>
                             <td> {{$cita->fecha_cita}}</td>
                             <td class="text-center"> 
+                            @if ($cita->fecha_cita > now())
                             <a href="{{ route('cita.update', ['id' => $cita->id,'valor'=>1]) }}" class="btn btn-success btn-circle btn-sm">
                                         <i class="fas fa-check"></i>
                                     </a>
+                                    @endif
+
                             </td>
                            
                      

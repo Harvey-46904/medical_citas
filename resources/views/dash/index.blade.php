@@ -297,15 +297,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Nos dejas?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Cerrar sesión</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Esta seguro que quiere cerrar sesion</div>
+                <div class="modal-body">Estás seguro de que desea cerrar la sesión?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary" href="{{route('logina')}}">Salir</a>
+                    <a class="btn btn-primary" href="{{route('logina')}}">Si</a>
                 </div>
             </div>
         </div>
@@ -322,7 +322,20 @@
     <!-- Custom scripts for all pages-->
     <script src="{!! asset('dash/js/sb-admin-2.min.js') !!}"></script>
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json"></script>
+    <script>
+    $(document).ready(function() {
+         
 
+            $('#dataTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json"
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
