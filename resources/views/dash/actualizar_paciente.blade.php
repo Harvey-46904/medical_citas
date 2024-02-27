@@ -42,7 +42,7 @@
 
                     <div class="form-group">
                             <input type="date" class="form-control form-control-user" id="fecha_nacimiento"
-                             placeholder="fecha_nacimiento" autocomplete="off" name="fecha_nacimiento">
+                             placeholder="fecha_nacimiento" autocomplete="off" name="fecha_nacimiento" value="{{$usuario->fecha_nacimiento}}">
                     </div>
                     <input type="submit"  class="btn btn-primary" value="Editar">
             </form>
