@@ -34,6 +34,7 @@
                         <input type="text" class="form-control" name="nombre" placeholder="" value="{{$usuario->nombre_profesinal}}">
 
                     </div>
+                    
                     <input type="submit"  class="btn btn-primary" value="Editar">
             </form>
     </div>

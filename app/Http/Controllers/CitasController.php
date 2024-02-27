@@ -18,40 +18,73 @@ class CitasController extends Controller
         $citas = DB::table("citas")->where('estado', 'Aprobada')
         ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
         ->join('servicios','citas.servicio_id','=',"servicios.id")
-        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
+        ->join('servicios_disponibilidads',"servicios_disponibilidads.servicio_id","=","servicios.id")
+        ->join("profesionales","servicios_disponibilidads.profesional_id","=","profesionales.id")
+
+        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","usuarios.telefono","usuarios.fecha_nacimiento","citas.fecha_cita","servicios.nombre_servicio","profesionales.nombre_profesinal")
         ->get();
+
+        $servicios=DB::table("servicios")->select()->get();
+        $doctores=DB::table("profesionales")->select()->get();
 
 
         $totalCitasEnEspera=self::notificacion_cita();
-        return view('dash.lista_aprobadas',compact("citas","totalCitasEnEspera"));
+        return view('dash.lista_aprobadas',compact("citas","totalCitasEnEspera","servicios","doctores"));
         
     }
     public function citas_rechazadas(){
         $citas = DB::table("citas")->where('estado', 'Rechazada')
         ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
         ->join('servicios','citas.servicio_id','=',"servicios.id")
-        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
+        ->join('servicios_disponibilidads',"servicios_disponibilidads.servicio_id","=","servicios.id")
+        ->join("profesionales","servicios_disponibilidads.profesional_id","=","profesionales.id")
+
+        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","usuarios.telefono","usuarios.fecha_nacimiento","citas.fecha_cita","servicios.nombre_servicio","profesionales.nombre_profesinal")
         ->get();
+
+        $servicios=DB::table("servicios")->select()->get();
+        $doctores=DB::table("profesionales")->select()->get();
         $totalCitasEnEspera=self::notificacion_cita();
-        return view('dash.lista_rechazadas',compact("citas","totalCitasEnEspera"));
+      
+        return view('dash.lista_rechazadas',compact("citas","totalCitasEnEspera","servicios","doctores"));
     }
     public function citas_canceladas(){
         $citas = DB::table("citas")->where('estado', 'Cita Cancelada')
         ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
         ->join('servicios','citas.servicio_id','=',"servicios.id")
-        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
+        ->join('servicios_disponibilidads',"servicios_disponibilidads.servicio_id","=","servicios.id")
+        ->join("profesionales","servicios_disponibilidads.profesional_id","=","profesionales.id")
+
+        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","usuarios.telefono","usuarios.fecha_nacimiento","citas.fecha_cita","servicios.nombre_servicio","profesionales.nombre_profesinal")
         ->get();
+
+        $servicios=DB::table("servicios")->select()->get();
+        $doctores=DB::table("profesionales")->select()->get();
         $totalCitasEnEspera=self::notificacion_cita();
-        return view('dash.lista_canceladas',compact("citas","totalCitasEnEspera"));
+        return view('dash.lista_canceladas',compact("citas","totalCitasEnEspera","servicios","doctores"));
+       
     }
     public function citas_espera(){
+       
         $citas = DB::table("citas")->where('estado', 'En Espera')
         ->join('usuarios', 'citas.usuario_id', '=', 'usuarios.id')
         ->join('servicios','citas.servicio_id','=',"servicios.id")
-        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","citas.fecha_cita","servicios.nombre_servicio")
+        ->join('servicios_disponibilidads',"servicios_disponibilidads.servicio_id","=","servicios.id")
+        ->join("profesionales","servicios_disponibilidads.profesional_id","=","profesionales.id")
+
+        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","usuarios.telefono","usuarios.fecha_nacimiento","citas.fecha_cita","servicios.nombre_servicio","profesionales.nombre_profesinal")
         ->get();
+        /*
+        ->join('servicios_disponibilidads',"servicios_disponibilidads.servicio_id","=","servicios.id")
+        ->join("profesionales","servicios_disponibilidads.profesional_id","=","profesionales.id")
+
+        ->select("citas.id","usuarios.nombre_completo","usuarios.cedula","usuarios.telefono","usuarios.fecha_nacimiento","citas.fecha_cita","servicios.nombre_servicio")
+        ->get();*/
+        $servicios=DB::table("servicios")->select()->get();
+        $doctores=DB::table("profesionales")->select()->get();
         $totalCitasEnEspera=self::notificacion_cita();
-        return view('dash.lista_espera',compact("citas","totalCitasEnEspera"));
+        return view('dash.lista_espera',compact("citas","totalCitasEnEspera","servicios","doctores"));
+   
     }
     
 

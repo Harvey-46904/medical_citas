@@ -41,6 +41,8 @@
                         <th class="text-center">Cedula</th>
                         <th class="text-center">Nombre Completo</th>
                         <th class="text-center">Teléfono</th>
+                        <th class="text-center">Fecha Nacimiento</th>
+                        <th class="text-center">Edad</th>
                         <th class="text-center">Actualizar</th>
                         <th class="text-center">Eliminar</th>
                        
@@ -49,12 +51,37 @@
              
                 <tbody>
                    
+                @php
+                function calcularedad($fechas){
+                  // Convertir la fecha proporcionada a objetos DateTime
+    $fechaActual = new DateTime(date('Y-m-d'));
+    $fechaDada = new DateTime($fechas);
 
+    // Calcular la diferencia entre las fechas
+    $diferencia = $fechaActual->diff($fechaDada);
+
+    // Obtener los años y los meses transcurridos
+    $aniosTranscurridos = $diferencia->y;
+    $mesesTranscurridos = $diferencia->m;
+    $diasTranscurridos = $diferencia->d;
+
+    // Verificar si ya se ha cumplido el aniversario en este año
+    if ($mesesTranscurridos < 0 || ($mesesTranscurridos == 0 && $diasTranscurridos < 0)) {
+        $aniosTranscurridos--;
+    }
+
+    return $aniosTranscurridos;
+                }
+                @endphp
                     @foreach($pacientes as $paciente)
                     <tr>
                             <td>{{$paciente->cedula}}</td>
                             <td> {{$paciente->nombre_completo}}</td>
                             <td> {{$paciente->telefono}}</td>
+                            <td> {{$paciente->fecha_nacimiento}}</td>
+                            <td>
+                              {{  calcularedad($paciente->fecha_nacimiento)}}
+                            </td>
                             <td class="text-center">
                                 <a  href="{{ route('usuario.editar', ['id' => $paciente->id]) }}"  class="btn btn-warning btn-circle btn-sm">
                                                 <i class="fas fa-exclamation-triangle"></i>
@@ -112,6 +139,11 @@
                 <input type="text" class="form-control" name="telefono" placeholder="">
                
             </div>
+
+            <div class="form-group">
+              <input type="date" class="form-control form-control-user" id="fecha_nacimiento"
+                 placeholder="fecha_nacimiento" autocomplete="off" name="fecha_nacimiento">
+             </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -144,8 +176,11 @@
             <div class="form-group">
                 <label for="exampleInputEmail1">Nombres Completos</label>
                 <input type="text" class="form-control" name="nombres_completos" placeholder="">
-               
             </div>
+            <div class="form-group">
+              <input type="date" class="form-control form-control-user" id="fecha_nacimiento"
+                 placeholder="fecha_nacimiento" autocomplete="off" name="fecha_nacimiento">
+             </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

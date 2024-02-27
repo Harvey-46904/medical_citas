@@ -28,6 +28,36 @@
 
     </div>
     <div class="card-body">
+    <div class="row">
+            <div class="col-md-4">
+                <label for="exampleFormControlSelect1">Fecha</label>
+                <input type="date" id="dateFilter" class="form-control" placeholder="Fecha">
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Servicios</label>
+                    <select class="form-control" id="serviceFilter">
+                        <option value="">Todos los servicios</option>
+                        @foreach($servicios as $servi)
+                        <option value="{{$servi->nombre_servicio}}">{{$servi->nombre_servicio}}</option>
+                        @endforeach
+                    </select>
+                </div>
+               
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Example select</label>
+                    <select class="form-control" id="doctorFilter">
+                        <option value="">Todos los profesionales</option>
+                        @foreach($doctores as $profe)
+                        <option value="{{$profe->nombre_profesinal}}">{{$profe->nombre_profesinal}}</option>
+                        @endforeach
+                    </select>
+                </div>
+               
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
@@ -35,9 +65,11 @@
                         
                         <th class="text-center">No Documento</th>
                         <th class="text-center">Nombre Completo</th>
+                        <th class="text-center">Edad</th>
+                        <th class="text-center">Teléfono</th>
                         <th class="text-center">Servicio</th>
                         <th class="text-center">Fecha</th>
-                        
+                        <th class="text-center">Doctor</th>
                         <th class="text-center">Aprobar</th>
                         <th class="text-center">Rechazar</th>
                        
@@ -46,14 +78,37 @@
              
                 <tbody>
                    
+                @php
+                function calcularedad($fechas){
+                  // Convertir la fecha proporcionada a objetos DateTime
+    $fechaActual = new DateTime(date('Y-m-d'));
+    $fechaDada = new DateTime($fechas);
 
+    // Calcular la diferencia entre las fechas
+    $diferencia = $fechaActual->diff($fechaDada);
+
+    // Obtener los años y los meses transcurridos
+    $aniosTranscurridos = $diferencia->y;
+    $mesesTranscurridos = $diferencia->m;
+    $diasTranscurridos = $diferencia->d;
+
+    // Verificar si ya se ha cumplido el aniversario en este año
+    if ($mesesTranscurridos < 0 || ($mesesTranscurridos == 0 && $diasTranscurridos < 0)) {
+        $aniosTranscurridos--;
+    }
+
+    return $aniosTranscurridos;
+                }
+                @endphp
                     @foreach($citas as $cita)
                     <tr>
                             <td>{{$cita->cedula}}</td>
                             <td>{{$cita->nombre_completo}}</td>
+                            <td> {{calcularedad($cita->fecha_nacimiento)}}</td>
+                            <td> {{$cita->telefono}}</td>
                             <td>{{$cita->nombre_servicio}}</td>
                             <td> {{$cita->fecha_cita}}</td>
-                          
+                            <td> {{$cita->nombre_profesinal}}</td>
                             <td class="text-center"> 
                             @if ($cita->fecha_cita > now())
                             <a href="{{ route('cita.update', ['id' => $cita->id,'valor'=>1]) }}" class="btn btn-success btn-circle btn-sm">

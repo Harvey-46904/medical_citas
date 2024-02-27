@@ -321,19 +321,45 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{!! asset('dash/js/sb-admin-2.min.js') !!}"></script>
-
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script>
     $(document).ready(function() {
-         
-
-            $('#dataTable').DataTable({
+          var tabla =  $('#dataTable').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json"
                 }
+               
             });
+            $('#dateFilter').change(function() {
+                var date = $(this).val();
+                tabla.column(5).search(date).draw();
+            });
+
+            $('#serviceFilter').change(function() {
+                var service = $(this).val();
+                tabla.column(4).search(service).draw();
+            });
+
+            $('#doctorFilter').change(function() {
+                var doctor = $(this).val();
+                tabla.column(6).search(doctor).draw();
+            });
+         /*
+    $('#fecha').datepicker({
+        dateFormat: 'yy-mm-dd', // Formato de fecha
+        onSelect: function() {
+            // Obtener la fecha seleccionada
+            var fechaSeleccionada = $('#fecha').val();
+
+            // Aplicar el filtro de búsqueda
+            tabla.search(fechaSeleccionada).draw();
+        }
+    });
+    */
         });
     </script>
 </body>

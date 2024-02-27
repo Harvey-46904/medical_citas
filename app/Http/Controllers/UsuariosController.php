@@ -70,6 +70,8 @@ class UsuariosController extends Controller
         $crear_usuario->nombre_completo=$request->nombres_completos;
         $crear_usuario->telefono=$request->telefono;
         $crear_usuario->role_id=1;
+        $crear_usuario->fecha_nacimiento=$request->fecha_nacimiento;
+        
         $crear_usuario->save();
         return response(["data"=>$crear_usuario]);
        
@@ -82,6 +84,7 @@ class UsuariosController extends Controller
         $crear_usuario->nombre_completo=$request->nombres_completos;
         $crear_usuario->telefono=$request->telefono;
         $crear_usuario->role_id=1;
+        $crear_usuario->fecha_nacimiento=$request->fecha_nacimiento;
         $crear_usuario->save();
         return redirect('/usuario')->with('success', 'Paciente guardado correctamente');
     }
@@ -126,7 +129,7 @@ class UsuariosController extends Controller
             $usuario->cedula = $request->numero_documento;
             $usuario->nombre_completo = $request->nombres_completos;
             $usuario->telefono = $request->telefono;
-        
+            $usuario->fecha_nacimiento=$request->fecha_nacimiento;
             // Guarda los cambios
             $usuario->save();
             return redirect('/usuario')->with('success', 'Paciente actualizado correctamente');
