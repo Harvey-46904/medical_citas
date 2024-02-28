@@ -47,7 +47,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="exampleFormControlSelect1">Example select</label>
+                    <label for="exampleFormControlSelect1">Profesionales</label>
                     <select class="form-control" id="doctorFilter">
                         <option value="">Todos los profesionales</option>
                         @foreach($doctores as $profe)
