@@ -841,7 +841,7 @@
                 _token: tokenCSRF,
                 numero_documento: numeroDocumento,
                 nombres_completos: nombresCompletos,
-                telefono: telefono_form
+                telefono: telefono_form,
                 fecha_nacimiento:nacimiento
                 // Agrega más campos según sea necesario
             };
