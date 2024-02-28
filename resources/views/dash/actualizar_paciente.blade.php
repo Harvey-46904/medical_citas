@@ -41,6 +41,7 @@
                     </div>
 
                     <div class="form-group">
+                            <label for="exampleInputEmail1">Fecha de nacimiento</label>
                             <input type="date" class="form-control form-control-user" id="fecha_nacimiento"
                              placeholder="fecha_nacimiento" autocomplete="off" name="fecha_nacimiento" value="{{$usuario->fecha_nacimiento}}">
                     </div>

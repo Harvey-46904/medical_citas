@@ -63,7 +63,10 @@ $totalCitasEnEspera); @endphp
                                                         autocomplete="off"
                                                     />
                                                 </div>
-
+                                                <div class="form-group">
+                                            <input type="date" class="form-control form-control-user" id="fecha_nacimiento"
+                                                placeholder="fecha_nacimiento" autocomplete="off">
+                                        </div>
                                                 <a
                                                     class="btn btn-primary btn-user btn-block registro_user"
                                                 >
@@ -514,13 +517,14 @@ $totalCitasEnEspera); @endphp
             var numeroDocumento = document.getElementById('numero_documento').value;
             var nombresCompletos = document.getElementById('exampleInputPassword').value;
             var telefono_form = document.getElementById('telefono').value;
-
+            var nacimiento = document.getElementById('fecha_nacimiento').value;
             // Crea un objeto con los datos a enviar
             var datos = {
                 _token: tokenCSRF,
                 numero_documento: numeroDocumento,
                 nombres_completos: nombresCompletos,
                 telefono: telefono_form
+                fecha_nacimiento:nacimiento
                 // Agrega más campos según sea necesario
             };
 
